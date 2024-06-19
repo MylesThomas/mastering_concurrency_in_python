@@ -1695,3 +1695,830 @@ In this chapter, we will cover the following concepts:
 
 ## The basics of web requests
 
+The worldwide capacity to generate data is estimated to double in size every two years.
+- Even though there is an interdisciplinary field known as data science that is entirely dedicated to the study of data, almost every programming task in software development also has something to do with collecting and analyzing data.
+- A significant part of this is, data collection.
+    - However, the data that we need for our applications is sometimes not stored nicely and cleanly in a database—sometimes, we need to collect the data we need from web pages.
+
+Example: Google runs numerous web scrapers of its own to find and index web pages for the search engine
+- Python provides some good options for applications like this
+- In this chapter, we will mainly work with the `requests` module
+
+Before we use this module, we need to understand some basic web terminology.
+
+## HTML
+
+HTML: Hypertext Markup Language
+- standard/most common markup language for web pages/web applications
+- "a plaintext file with .html file extension"
+
+Example:
+
+![example of HTML code](image-13.png)
+
+Fortunately, detailed knowledge on what each HTML tag accomplishes is not required for
+us to be able to make effective web requests.
+- As we will see later on in this chapter, the more essential part of making web requests is the ability to interact with web pages efficiently.
+
+## HTTP requests
+
+In a typical communication process on the web, HTML texts are the data that is to be saved
+and/or further processed.
+- This data needs to be first collected from web pages
+
+how can we go about doing that?
+
+Most of the communication is done via the internet
+- more specifically, the World Wide Web
+    - this utilizes the Hypertext Transfer Protocol (HTTP).
+    - In HTTP, request methods are used to convey the information of what data is being requested and should be sent back from a server.
+
+For example: when you type `packtpub.com` in your browser...
+- the browser sends a request method via HTTP to the Packt website's main server asking for data from the website
+    - Now, if both your internet connection and Packt's server are working well, your browser will receive a response back from the server
+- This response will be in the form of an HTML document
+    - this will be interpreted by your browser and the browser displays the HTML output to the screen.
+
+![Diagram of HTTP communication](image-14.png)
+
+Generally: requests methods are defined as verbs
+- they indicate the desired action to be performed when the HTTP client and server communicate
+- Examples: GET, HEAD, POST, PUT, DELETE
+    - GET: Retrieve data
+        - Does not affect server or databases
+    - POST: Send data (to the server)
+        - must be sent in a form that is accepted by the server
+        - could be data that is added to a database
+
+Note: All general-purpose HTTP servers that we see on the internet are required to implement at least the GET (and HEAD) method
+-  the POST method is considered optional
+
+## HTTP status code
+
+The server cannot always process our requests and return the data - failures do occur
+- the server could be completely down OR busy interacting with other clients (ie. unresponsive to new requests)
+- the client could also have made a bad request
+    - incorrect format
+    - malicious requests
+
+A way to categorize these problems = HTTP response status code!
+- Typically: 3 digit number that gives info of the response the server sends to the client
+- 5 large categories, indicated by the first digit of the code:
+    - 1xx: informational status code
+        - requests was received, server is processing it
+        - example: 100 = request header received, server is waiting for request body
+        - example: 102 = request is being processed
+            - used for large requests ie. to prevent a client timing out
+    - 2xx: successful status code
+        - request successfully received, understood + processed
+        - example: 200 = successfully fulfilled
+        - example: 202 = accepted, processing not complete
+    - 3xx: redirectional status code
+        - additional steps need to be taken
+        - example: 300 = there are multiple options for how the response from server should be processed
+            - for example, giving the client multiple video format options when a video file is to be downloaded
+        - example: 301 = server has been moved permanently ie. use another address
+    - 4xx: error status code (for the client)
+        - request was incorrectly formatted and cannot be processed
+        - example: 400 = client sent a bad request ie. too large
+        - example: 404 = request method is not supported
+            - most well known status code
+    - 5xx: error status code (for the server)
+        - request was valid, but server could not process it
+        - example: 500 = internal server error ie. unexpected condition occurred
+        - example: 504 = gateway timeout
+            - server was acting as gateway/proxy, did not get a response from final server in time
+        
+A lot more can be said about these status codes, but it is already sufficient for us to keep in
+mind the big five categories previously mentioned when making web requests from Python.
+- If you would like to find more specific information about the above or other status codes, the Internet Assigned Numbers Authority (IANA) maintains the official registry of HTTP status codes. 
+
+## The requests module
+
+The `requests` module allows its users to make and send HTTP request methods.
+- In the applications that we will be considering, it is mainly used to make contact with the server
+of the web pages we want to extract data from and obtain the response for the server.
+
+To install on your local:
+
+```bash
+pip install requests
+```
+
+These commands should install requests and any other required dependencies (idna,
+certifi, urllib3, and so on) for you if your system does not have those already.
+
+After this, run import requests in a Python interpreter to confirm that the module has been
+installed successfully.
+
+```bash
+python
+import requests
+exit()
+
+```
+
+## Making a request in Python
+
+Let's look at an example usage of the module:
+
+```py
+# ch05/example1.py
+
+import requests
+
+url = 'http://www.google.com'
+
+res = requests.get(url)
+
+print(res.status_code)
+print(res.headers)
+
+with open('google.html', 'w') as f:
+    f.write(res.text)
+
+print('Done.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter05
+python example1.py
+```
+
+You should get the following output:
+
+```bash
+200
+{'Date': 'Wed, 19 Jun 2024 02:56:02 GMT', 'Expires': '-1', 'Cache-Control': 'private, max-age=0', 'Content-Type': 'text/html; charset=ISO-8859-1', 'Content-Security-Policy-Report-Only': "object-src 'none';base-uri 'self';script-src 
+'nonce-k2FFKKHqTtWbqnCGIZaOMQ' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp", 'P3P': 'CP="This is not a P3P policy! See g.co/p3phelp for more info."', 'Content-Encoding': 'gzip', 'Server': 'gws', 'Content-Length': '8421', 'X-XSS-Protection': '0', 'X-Frame-Options': 'SAMEORIGIN', 'Set-Cookie': '1P_JAR=2024-06-19-02; expires=Fri, 19-Jul-2024 02:56:02 GMT; path=/; domain=.google.com; Secure, AEC=AQTF6Hy3lS4pSGwIuEc8EpYHwsng8GT0-xjQ81f00XMUbXc4aiNDclvRUss; expires=Mon, 16-Dec-2024 02:56:02 GMT; path=/; domain=.google.com; Secure; HttpOnly; SameSite=lax, NID=515=JXP5W1sxGRsCKqcqz40WTNIODdP7ooqvR8-CAyeWbMgrm3yOEpWbWnFXlxl6x56MwEChL1DmfwzklhLedDyf0G_Ry-Fk9PD-ExrKu3qflWhIFICSPehvzGuGDrPa3bqNFFtC-CxxDG0m3FJPt8Zoz8DjYP0BpL7MqEjLnAQ5MCQ; expires=Thu, 19-Dec-2024 02:56:02 GMT; path=/; domain=.google.com; HttpOnly'}
+Done.
+```
+
+What is going on here:
+- we use `requests` to download the HTML code of www.google.com
+    - requests.get() sents a GET request to the url
+    - we store the response to `res`
+    - then, we write the text in res to a file `google.html`
+
+The complete data sent from the server was also written to the google.html file.
+- When you open the file in a text editor, you can see the HTML code of the web page that we downloaded
+- If you use a web browser, you will see how **most** of the information from the original web page is being displayed through a downloaded/offline file
+
+For example, the following is how Google Chrome on my system interprets the HTML file:
+
+![Downloaded HTML opened offline](image-15.png)
+
+Note: There is other information that is stored on the server that web pages of that server make
+reference to.
+- What this means: not all of the information in an online web pagecan be downloaded via a GET request
+    - this is why offline HTML code sometimes fails to contain all of the information available on the online web page
+    - example: not display the Google icon correctly
+
+## Running a ping test
+
+Let's run a ping test
+
+Ping test: process where you test the communication between your system (client) and some specific web servers
+- How: make a request to each server
+- How test is evaluated: HTTP responses codes
+- What it evaluates:
+    - internet connection of your own system;
+    - the availability of the servers
+- quite common with web administrators
+    - they need to manage a large # of websites at the same time
+- What they are good for:
+    - quickly finding pages that are unresponsive/down
+
+To simulate different HTTP response status codes to be sent back to our program, we will
+be using httpstat.us
+- super simple service for generating different HTTP codes
+    - useful for testing how your own scripts deal with varying responses
+    - example: to use a request that will return a 200 status code, make a request to httpstat.us/200
+
+Let's look at an example:
+
+```py
+# ch05/example2.py
+
+import requests
+
+def ping(url):
+    res = requests.get(url)
+    print(f'{url}: {res.text}')
+
+urls = [
+    'http://httpstat.us/200',
+    'http://httpstat.us/400',
+    'http://httpstat.us/404',
+    'http://httpstat.us/408',
+    'http://httpstat.us/500',
+    'http://httpstat.us/524'
+]
+
+for url in urls:
+    ping(url)
+
+print('Done.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter05
+python example2.py
+```
+
+Output:
+
+```bash
+http://httpstat.us/200: 200 OK
+http://httpstat.us/400: 400 Bad Request
+http://httpstat.us/404: 404 Not Found
+http://httpstat.us/408: 408 Request Timeout
+http://httpstat.us/500: 500 Internal Server Error
+http://httpstat.us/524: 524 A Timeout Occurred
+Done.
+```
+
+What is going on here:
+- `ping()` function takes in URL, makes GET request to site
+    - prints out content of each response
+
+## Concurrent web requests
+
+In the context of concurrent programming, we can see that the process of making a request to a web server and obtaining the returned response is independent from the same procedure for a different web server.
+- we can apply concurrency and parallelism to our ping test application to speed up execution
+
+In the concurrent ping test applications that we are designing: multiple HTTP requests will
+be made to the server at the same time
+
+![Parallel HTTP requests](image-16.png)
+
+## Spawning multiple threads
+
+we apply concurrency via `threading` in this example:
+
+```py
+# ch05/example3.py
+
+import threading
+import requests
+import time
+
+def ping(url):
+    res = requests.get(url)
+    print(f'{url}: {res.text}')
+
+urls = [
+    'http://httpstat.us/200',
+    'http://httpstat.us/400',
+    'http://httpstat.us/404',
+    'http://httpstat.us/408',
+    'http://httpstat.us/500',
+    'http://httpstat.us/524'
+]
+
+start = time.time()
+for url in urls:
+    ping(url)
+print(f'Sequential: {time.time() - start : .2f} seconds')
+
+print()
+
+start = time.time()
+threads = []
+for url in urls:
+    thread = threading.Thread(target=ping, args=(url,))
+    threads.append(thread)
+    thread.start()
+for thread in threads:
+    thread.join()
+
+print(f'Threading: {time.time() - start : .2f} seconds')
+
+```
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter05
+python example3.py
+
+```
+
+Output:
+
+```bash
+http://httpstat.us/200: 200 OK
+http://httpstat.us/400: 400 Bad Request
+http://httpstat.us/404: 404 Not Found
+http://httpstat.us/408: 408 Request Timeout
+http://httpstat.us/500: 500 Internal Server Error
+http://httpstat.us/524: 524 A Timeout Occurred
+Sequential:  0.47 seconds
+
+http://httpstat.us/200: 200 OK
+http://httpstat.us/404: 404 Not Found
+http://httpstat.us/400: 400 Bad Request
+http://httpstat.us/408: 408 Request Timeout
+http://httpstat.us/500: 500 Internal Server Error
+http://httpstat.us/524: 524 A Timeout Occurred
+Threading:  0.21 seconds
+```
+
+What happened:
+- threading was much faster
+
+note: each thread was executed independently, so the order may not finish how they started
+
+## Refactoring request logic
+
+We can improve the readability by making a class:
+
+```py
+# ch05/example4.py
+
+import threading
+import requests
+import time
+
+class MyThread(threading.Thread):
+    def __init__(self, url):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.result = None
+
+    def run(self):
+        res = requests.get(self.url)
+        self.result = f'{self.url}: {res.text}'
+
+urls = [
+    'http://httpstat.us/200',
+    'http://httpstat.us/400',
+    'http://httpstat.us/404',
+    'http://httpstat.us/408',
+    'http://httpstat.us/500',
+    'http://httpstat.us/524'
+]
+
+start = time.time()
+
+threads = [MyThread(url) for url in urls]
+for thread in threads:
+    thread.start()
+for thread in threads:
+    thread.join()
+for thread in threads:
+    print(thread.result)
+
+print(f'Took {time.time() - start : .2f} seconds')
+
+print('Done.')
+
+```
+
+What is going on here:
+- `MyThread` inherits from `threading.Thread`
+- added attributes:
+    - `url`: url to send request to
+    - `result`: response
+- This lets us simply loop through the threads.
+
+The speedup is still significant, and now our main program is more readable!
+- We can also adjust the request logic without impacting the rest of the program
+
+## The problem of timeout
+
+Potential improvement to our ping test app: timeout handling
+- timeouts: typically occur when server takes too long to handle a request
+    - connection between client/server is terminated
+
+In context of ping test application: We will implement a customized threshold for timeouts
+- if request takes more that timeout threshold, we "categorize" that server with a timeout
+
+### Support from httpstat.us and simulation in Python
+
+httpstat.us also gives us a way to simulate delays in response when you send in a request
+- delay time: in milliseconds
+- example: http://httpstat.us/200?sleep=5000
+    - delays 5 seconds, then returns 200
+
+Let's see how delays can affect our ping test program:
+
+```py
+# ch05/example5.py
+
+import threading
+import requests
+import time
+
+class MyThread(threading.Thread):
+    def __init__(self, url):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.result = None
+
+    def run(self):
+        res = requests.get(self.url)
+        self.result = f'{self.url}: {res.text}'
+
+urls = [
+    'http://httpstat.us/200',
+    'http://httpstat.us/200?sleep=20000',
+    'http://httpstat.us/400'
+]
+
+start = time.time()
+
+threads = [MyThread(url) for url in urls]
+for thread in threads:
+    thread.start()
+for thread in threads:
+    thread.join()
+for thread in threads:
+    print(thread.result)
+
+print(f'Took {time.time() - start : .2f} seconds')
+
+print('Done.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter05
+python example5.py
+
+```
+
+Output:
+
+```bash
+http://httpstat.us/200: 200 OK
+http://httpstat.us/200?sleep=20000: 200 OK
+http://httpstat.us/400: 400 Bad Request
+Took  20.31 seconds
+Done.
+```
+
+What happened: A 20 second delay occured in the 2nd thread
+- will make the execution take way longer to finish
+
+## Timeout specifications
+
+An efficient ping test should NOT be waiting for responses from its websites for a long time!
+- needs to have a set threshold
+    - if threshold exceeds, that server is deemed non-responsive
+- how we will do this:
+    - count down from timeouts threshold
+    - if we get to 0 ie. the threshold passed, we print all responses (whether returned yet or not)
+
+One more consideration: Keeping track of how many requests are pending ie. have not had a response returned
+- `isAlive()`: method from `threading.Thread` that tells if a response has returned
+    - if it is alive, the response is still pending
+
+Let's look at an example, specifically `process_requests()` method:
+
+```py
+# ch05/example6.py
+
+import threading
+import requests
+import time
+
+UPDATE_INTERVAL = 0.01
+
+def process_requests(threads, timeout=5):
+    def alive_count():
+        alive = [1 if thread.is_alive() else 0 for thread in threads]
+        return sum(alive)
+
+    while alive_count() > 0 and timeout > 0:
+        timeout -= UPDATE_INTERVAL
+        time.sleep(UPDATE_INTERVAL)
+    for thread in threads:
+        print(thread.result)
+
+```
+
+What this function does:
+- Take in list of threads that have been making web requests
+- Checks how many threads are alive
+    - While that value is > 0 and timeout is > 0, sleep and check again
+        - Once either of these values is 0, we print the result of each thread
+
+Next, the updated `MyThread` class:
+
+```py
+class MyThread(threading.Thread):
+    def __init__(self, url):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.result = f'{self.url}: Custom timeout'
+```
+
+What has changed here:
+- self.result has a default value
+    - if the timeout threshold is passed, this initial value is used when responses print out
+
+Finally, the main part of the program:
+
+```py
+urls = [
+    'http://httpstat.us/200',
+    'http://httpstat.us/200?sleep=4000',
+    'http://httpstat.us/200?sleep=20000',
+    'http://httpstat.us/400'
+]
+
+start = time.time()
+
+threads = [MyThread(url) for url in urls]
+for thread in threads:
+    # thread.setDaemon(True)
+    thread.daemon = True
+    thread.start()
+process_requests(threads)
+
+print(f'Took {time.time() - start : .2f} seconds')
+
+print('Done.')
+```
+
+What is going on here:
+- We have list of URLs
+    - 2 respond right away
+    - 1 responds in 4s
+    - 1 respons in 20s
+        - this is > timeout threshold of 5s, so it won't get a response
+
+Another consideratio: Daemon threads
+- daemon thread:  a thread that runs in the background and does not prevent the program from exiting
+    - in this example: when the main program ends, and the 20s thread is still not getting a response, the thread is terminated
+        - program then ends successfully
+    - if this was not a daemon thread: The 20-second-delay request will still be running after our program exits out of `process_requests()`
+        - will block the main program from finishing until the thread itself finishes
+        - what exactly will happen: the main program will hang for around 20 seconds, as the non-daemon thread processing the 20-second-delay request is still running, before being able to finish its execution (even though the output produced will be identical)
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter05
+python example6.py
+
+```
+
+Output:
+
+```bash
+http://httpstat.us/200: 200 OK
+http://httpstat.us/200?sleep=4000: 200 OK
+http://httpstat.us/200?sleep=20000: Custom timeout
+http://httpstat.us/400: 400 Bad Request
+Took  5.81 seconds
+Done.
+```
+
+As you can see, the program took 5 seconds, as opposed to 20!
+- it took 5 seconds waiting for threads that were still running
+ - as soon as 5 seconds passed, program printed results and ended
+ - for the thread that would have taken 20 seconds, notice how it printed 'Custom timeout' as declared in the `MyThread` class
+
+## Good practices in making web requests
+
+### Consider the terms of service and data-collecting policies
+
+Unauthorized data collection: a top of discussion in technology for years
+- it will continue to be a topic, so it is important for developers to be aware of websites' policies on data collecting
+    - typically: found in terms of service/similar docs
+    - can contact website directly as well
+
+### Error handling
+
+Error: something that no one can avoid when programming
+- especially true when making web requests!
+- types of errors:
+    - bad/invalid requests or bad internet connections
+    - mishandling/unsuccessfully downloaded HTML code
+- important: try...except blocks
+
+Again: avoiding crashes is especially important when code/applications are in production w/ larger applications!
+
+Specifically for concurrent web scraping: some threads may collect data, others will not
+- implementing error-handling functionalities can ensure that successful threads can return their results
+    - ie. make sure a failed thread won't crash the program
+
+Important to note: Blind error-catching is undesirable
+- what this term indicates: large try...except blocks in our program
+    - ones that will catch any/all errors
+    - specifically: we don't get any information on the errors
+        - "Error swallowing"
+
+Recommendation: specific error handling code
+1. appropriate actions can be taken for that error
+2. other errors that have not been found yet might be revealed
+
+### Update your program regularly
+
+Websites commonly change their request-handling logic AND displayed data
+- Example: Program makes requests to a website in a certain format, and handles only 1 type of response
+    - If website alters how it handles requests, the program will stop working correctly
+- Where this happens frequently: Web scraping program that look for data in specific HTML tags
+    - when HTML tags change, program will fail to find the data
+
+Why do websites do this: prevent automated data collecting programs from working
+
+### Avoid making a large number of requests
+
+Everytime out program runs: It makes HTTPS requests to a server that manages the site you are trying to get data from
+- With concurrent programs: This happens more frequently + in a shorter period of time
+
+Servers Nowadays: Can handle many request at the same time
+- However: to avoid overworking/consuming too many resources, servers are designed to stop answering requests that come in too fast
+- Example: Amazon/Twitter look for large amounts of automated requests from 1 IP address
+    - response protocols are implemented ie.
+        - delays
+        - refusal to respond
+        - blocked IP address (for a period of time)
+
+Why? Heavy-duty requests to servers is a form of hacking a website!
+- Denial of Service (DoS) attacks and Distributed Denial of Service (DDoS) attacks: many requests made at same time to a server
+    - This floods the bandwidth
+    - Normal requests now are denied (servers are busy processing the malicious concurrent requests)
+
+![A of a DDoS attack](image-17.png)
+
+To avoid this...
+
+Important: Space out concurrent requests to make sure you are not seen as a hacker/malicious client
+- Methods:
+    - limit max. number of threads/requests at a time
+    - pause threads using `time.sleep()` before making a request to the server
+
+
+## Summary
+
+In this chapter, we have learned about the basics of HTML and web requests.
+- The two most common web requests are GET and POST requests.
+- There are five main categories for HTTP response status code
+    - each indicating a different concept regarding the communication between the server and its client
+    - By considering the status codes received from different websites, we can write a ping test application that effectively checks for the responsiveness of those websites
+
+Concurrency can be applied to the problem of making multiple web requests at the same time via threading
+- provides a significant improvement in application speed.
+- However, it is important to keep in mind a number of considerations when make concurrent web requests.
+
+In the next chapter, we will start discussing another major player in concurrent programming: processes.
+
+We will be considering the concept of and the basic idea behind a process, and the options that Python provides for us to work with processes.
+
+---
+
+# Chapter 6 - Working with Processes in Python
+
+This chapter is the first of 3 chapters on using concurrency through multiprocessing programming in Python.
+
+In this chapter:
+- formal definition of a process
+- the `multiprocessing` module in Python
+- most common ways of working with processes using the API of the `multiprocessing` module
+    - `Process` class
+    - `Pool` class
+    - interprocess communication tools such as the `Queue` class
+
+The following topics will be covered in this chapter:
+- The concept of a process in the context of concurrent programming in computer science
+- The basic API of the multiprocessing module in Python
+- How to interact with processes and the advanced functionalities that the multiprocessing module provides
+- How the multiprocessing module supports interprocess communication
+- The key differences between multiprocessing and multithreading in concurrent programming
+
+## The concept of a process
+
+process of execution: an instance of a specific computer program/software that is being executed by the operating system
+- contians both the program code and its current activities and interactions with other entities
+
+Depending on the operating system, the implementation of a process can be made up of
+multiple threads of execution that can execute instructions concurrently or in parallel.
+
+Important to note: a process is not equivalent to a computer program.
+- a program: a static collection of instructions (program code)
+- a process is instead the actual execution of those instructions
+    - the same program could be run concurrently by spawning multiple processes (these processes execute the same code from the parent program)
+
+Example: Google Chrome
+- Chrome usually manages a process called Google Chrome Helper for its main program
+    - in order to facilitate web browsing and other processes, to assist with various purposes.
+
+Easy way to see what different processes your system is running/managing: Task Manager
+- Activity Monitor for iOS, System Monitor for Linux
+
+The following is a screenshot of my Activity Monitor.
+- Multiple processes with the name "Google Chrome Helper" can be seen in the list
+- The PID column (which stands for process ID) reports the unique ID that each process has:
+
+![Sample list of processes](image-18.png)
+
+Note: Task Manager -> Details is similar on Windows
+
+## Processes versus threads
+
+One of the most common mistakes that programmers make when developing concurrent/parallel applications is to confuse the structure and functionalities of processes and threads.
+
+The relationship between Threads and Processes is shown in this diagram:
+
+![Diagram of two threads executing in one process](image-19.png)
+
+Processes:
+- larger programming units than threads
+    - more complicated
+    - consists of more programming components
+    - requires more resources
+
+Threads:
+- "lightweight process"
+
+In a typical computer process, here are some of the main resources running:
+- An image (or copy) of the code being executed from the parent program.
+- Memory associated with an instance of a program
+    - This might include:
+        - executable code
+        - input and output for that specific process
+        - a call stack to manage programspecific events
+        - a heap that contains generated computation data (and is currently being used by the process during runtime)
+- Descriptors for the resources allocated to that specific process by the operating system
+- Security components of a specific process
+    - namely: the owner of the process and its permissions and allowed operations
+- The processor state (process context).
+    - The context data of a process is often located in processor registers, the memory used by the process, or in control registers used by the operating system to manage the process.
+
+Because each process has a state dedicated to it, processes hold more state information than threads.
+- multiple threads within a process in turn share process states, memory, and other various resources
+- For similar reasons, processes only interact with each other through "system-facilitated interprocess communication methods"
+    - threads can communicate with one another easily through shared resources
+
+Additionally: context-switching
+- context-switching is the act of saving the state data of a process/thread to interrupt the execution of a task (so you can resume it later)
+    - takes more time between different processes than between different threads in the same process
+        - threads require careful memory synchronization for data handling
+        - processes do not (little to no synchronization)
+
+## Multiprocessing
+
+Multitasking: When an operating system swithces between different processes at a high speed
+- Gives the appearance they are being executed simultaneously
+    - In reality: 1 process is executing on 1 CPU at a given time
+    - Multiprocessing: Using more than 1 CPU to execute a given task
+
+While there are a number of different uses of the term multiprocessing, in the context of
+concurrency and parallelism... multiprocessing refers to "the execution of multiple concurrent
+processes in an operating system"
+- each process is executed on a separate CPU
+    - as opposed to a single process being executed at any given time
+- an operating system needs to have 2+ CPUs to implement multiprocessing tasks
+    - needs to support many processors and allocate tasks between them
+
+This diagram shows the relationship between multiprocessing and multiple cores:
+
+![Example diagram of multiprocessing using two CPU cores](image-20.png)
+
+Multithreading shares a somewhat similar definition to multiprocessing:
+- Multithreading: 1 processor is used
+    - system switches between tasks within that 1 processor (ie. time slicing)
+- Multiprocessing: 2+ processors used at the same time
+    - multiple processes being executed in parallel
+
+Multiprocessing applications have enjoyed significant popularity in the field of concurrent
+and parallel programming. Some reasons for this are listed as follows:
+- Faster execution time: when done correctly, concurrency speeds up your programs
+- Synchronization free: since separate processes don't share resources, developers hardly need to coordinate this sharing (unlike in multithreading)
+- Safety from crashes: since processes are independent in terms of computing procedures AND input/output, 1 process failing does not affect another processor (if handled correctly)
+    - what this implies: programmers can spawn a ton of processes and the chance of the entire application crashing would not increase
+
+With that being said, here are the disadvantages:
+- Multiple processors needed: Even though multiple processors is common nowadays, you need this
+- Processing time and space: It takes a lot of computing time and power to spawn and manage processes in a multiprocessing way
+
+## Introductory example in Python
+
+To illustrate the concept of running multiple processes on one operating system, let's look
+at a quick example in Python.
+
+```py
+
+```
+
+
