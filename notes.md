@@ -1453,6 +1453,245 @@ The following topics will be covered in this chapter:
 
 ## Context management
 
-a
+`with` statement: most commonly used as a context manager that manages resources
+- essential in concurrent and parallel programming (since resources are shared across different entities in the concurrent or parallel application)
 
 ## Starting from managing files
+
+As an experienced Python user, you have probably seen the `with` statement being used to
+open and read external files inside Python programs.
+- At a lower level: The operatoin of opening an external file in Python consumes a resource
+    - resource: file descriptor
+    - operating system sets a limit on this resource
+        - What this means: upper limit on how many files a single process can open simultaneously
+
+Let's look at a quick example to illustrate:
+
+```py
+# ch4/example1.py
+
+n_files = 254
+files = []
+
+# method 1
+for i in range(n_files):
+    files.append(open('output1/sample%i.txt' % i, 'w'))
+```
+
+Run the program:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter04
+python example1.py
+
+```
+
+It runs, and there are no prints or anything. OK...
+
+Now, try running it with `n_files` = 10000! This is similar to what you should see:
+
+```bash
+C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter04>python example1.py
+Traceback (most recent call last):
+  File "C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter04\example1.py", line 
+8, in <module>
+OSError: [Errno 24] Too many open files: 'output1/sample8189.txt'
+```
+
+What is going on here:
+-  File descriptor leakage: Your laptop/device can only handle a certain amount of opened files at the same time
+    - On LINUX/UNIX-like systems, print `ulimit -n` to see how many files (I got 1024 via my Ubuntu on WSL)
+- Can lead to a number of problems:
+    -  unauthorized I/O operations on open files
+
+Example 2 takes care of this properly too. (Run the code if you'd like to see)
+
+## The with statement as a context manager
+
+In real-life applications: It is easy to mismanage opened files in your programs (ie. by forgetting to close them)
+- It can also be impossible to tell whether the program has processed a file
+    - Makes it difficult to close the file appropriately
+    - This situation is even more common in concurrent and parallel programming, where the
+order of execution between different elements changes frequently
+
+Solution 1: use a `try...except...finally` block every time we want to interact with an
+external file
+-  still requires the same level of management and significant overhead
+- does not provide a good improvement in the ease and readability of our
+programs either
+
+Solution 2 (better): `with` statement
+- gives us a simple way of ensuring that all opened files are properly managed and cleaned up when the program finishes using them
+    - most notable advantage: even if the code is successfully executed or it returns an error, the with statement always handles and manages the opened files appropriately (via context)
+
+Let's look at an example:
+
+```py
+for i in range(n_files):
+    with open('output1/sample%i.txt' % i, 'w') as f:
+        files.append(f)
+
+```
+
+Another pro: the with statement helps us indicate the scope of certain variables
+- in this case, the variables that point to the opened files—and hence, their context
+- in this example: `f` indicates the current opened file within the `with` block at each iteration of the `for` loop
+    - as soon as program exits the `with` block, you can no longer access `f`
+        - guarantees that all cleanup associated with a file descriptor happens appropriately
+            - hence why it is called a context manager
+
+## The syntax of the with statement
+
+Purpose: wrapping the execution of a block with methods defined by a context manager
+
+```bash
+with [expression] (as [target]):
+    [code]
+```
+
+Note: `as [target]` is not required
+- Another note: `with` statement can handle more than 1 item on the same line
+- Specifically, the context managers created are treated as if multiple with statements were nested inside one another
+
+Look at this example:
+
+```bash
+with [expression1] as [target1], [expression2] as [target2]:
+    [code]
+```
+
+This is interpreted as follows:
+
+```bash
+with [expression1] as [target1]:
+    with [expression2] as [target2]:
+        [code]
+
+```
+
+## The with statement in concurrent programming
+
+These are simple examples - opening and closing files does not resemble concurrency much at all.
+
+As a context manager, is not only used to manage file descriptors, but most resources in general.
+-  if you actually found managing lock objects from the `threading.Lock()` class similar to managing external files while going through Chapter 2 - Amdahl's Law, then this is where the comparison comes in handy
+
+Refresher: locks are used in concurrent and parallel programming to synchronize threads in a multithreaded application
+- goal: prevent one thread from accessing the critical session at the same time as another
+- unfortunately, locks are a common source of deadlock
+    - deadlock: when a thread acquires a lock but never releases it (due to an unhandled occurrence)
+        - this stops the entire program!
+
+## Example of deadlock handling
+
+Let's take a look at this example:
+
+```py
+# ch4/example2.py
+
+from threading import Lock
+
+my_lock = Lock()
+
+# induces deadlocks
+def get_data_from_file_v1(filename):
+    my_lock.acquire()
+
+    with open(filename, 'r') as f:
+        data.append(f.read())
+
+    my_lock.release()
+
+# handles exceptions
+def get_data_from_file_v2(filename):
+    with my_lock, open(filename, 'r') as f:
+        data.append(f.read())
+
+data = []
+
+try:
+    get_data_from_file_v1('output2/sample0.txt')
+    #get_data_from_file_v2('output2/sample0.txt')
+except FileNotFoundError:
+    print('File could not be found...')
+
+my_lock.acquire()
+print('Lock can still be acquired.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter04
+python example2.py
+
+```
+
+What is going on here:
+- We declare a lock `my_lock`
+- We run a function `get_data_from_file_v1` try to read a file (that doesn't exist)
+    - Lock is acquired via `my_lock.acquire()` ie. the thread takes over this lock
+    - Error occurs reading file (since it doesn't exist)
+    - Lock does not get released via `my_lock.release()` due to error
+        - We know this because the print statement at the end of the program never runs
+            - Deadlock was induced!
+
+My program is stuck - look at this:
+
+![Stuck program](image-12.png)
+
+Let's try with `with` - Comment out line 24 ie. `get_data_from_file_v1('output2/sample0.txt')` and uncomment line 25 and you will now get the following:
+
+```bash
+File could not be found...
+Lock can still be acquired.
+```
+
+Since Lock objects are context managers, simply using `with my_lock:` ensures that
+the lock object is acquired and released appropriately
+- even if an exception is encountered inside the block!
+
+## Summary
+
+The `with` statement in Python offers an intuitive/convenient way to manage resources, while still ensuring that errors and exceptions are handled correctly.
+- This ability to manage resources is even more important in concurrent and parallel programming
+    - various resources are shared across different entities
+        - specifically, by using the `with` statement with `threading.Lock` objects that are used to synchronize different threads in a multithreaded application.
+
+Aside from better error handling and guaranteed cleanup tasks, the `with` statement also
+provides extra readability from your programs
+- one of the strongest features that Python offers its developers
+
+In the next chapter, we will be discussing one of the most popular uses of Python at the
+moment: web-scraping applications.
+- We will look at the concept and the basic idea behind web scraping, the tools that Python provides to support web scraping, and how concurrency will significantly help your web-scraping applications.
+
+---
+
+# Chapter 5 - Concurrent Web Requests
+
+This chapter will focus on the application of concurrency in making web requests.
+- Intuitively: making requests to a web page to collect information about it is independent to applying the same task to another web page.
+- Concurrency, specifically threading in this case, therefore can be a powerful tool that provides a significant speedup in this process.
+
+In this chapter, we will learn the fundamentals of web requests and how to interact with
+websites using Python.
+
+We will also see how concurrency can help us make multiple requests in an efficient way.
+
+Finally, we will look at a number of good practices in web requests.
+
+In this chapter, we will cover the following concepts:
+- The basics of web requests
+- The requests module
+- Concurrent web requests
+- The problem of timeout
+- Good practices in making web requests
+
+## The basics of web requests
+
