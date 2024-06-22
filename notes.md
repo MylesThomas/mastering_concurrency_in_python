@@ -2518,7 +2518,1069 @@ To illustrate the concept of running multiple processes on one operating system,
 at a quick example in Python.
 
 ```py
+# ch6/example1.py
+
+from multiprocessing import Process
+import time
+
+
+def count_down(name, delay):
+    print('Process %s starting...' % name)
+
+    counter = 5
+
+    while counter:
+        time.sleep(delay)
+        print('Process %s counting down: %i...' % (name, counter))
+        counter -= 1
+
+    print('Process %s exiting...' % name)
+
+
+if __name__ == '__main__':
+    process1 = Process(target=count_down, args=('A', 0.5))
+    process2 = Process(target=count_down, args=('B', 0.5))
+
+    process1.start()
+    process2.start()
+
+    process1.join()
+    process2.join()
+
+    print('Done.')
 
 ```
 
+What is going on here:
+- Both processors count down from 5 to 1
+    - Sleep between iterations for 0.5 seconds before continuing
+
+Similar to how two separate threads would do this, our two processes will carry out their own countdowns concurrently.
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example1.py
+
+```
+
+Output:
+
+```bash
+Process A starting...
+Process B starting...
+Process B counting down: 5...
+Process A counting down: 5...
+Process B counting down: 4...
+Process A counting down: 4...
+Process B counting down: 3...
+Process A counting down: 3...
+Process B counting down: 2...
+Process A counting down: 2...
+Process A counting down: 1...
+Process A exiting...
+Process B counting down: 1...
+Process B exiting...
+Done.
+```
+
+Even though processes are more expensive and contain more overhead than threads, multiprocessing also allows double the improvement in terms of speed for programs such as the preceding one.
+
+Remember: in multithreading we saw a phenomenon in which the order of the printed
+output changed between different runs of the program
+- in multiprocessing this can occur too: it is a direct result of implementing and starting
+two processes that execute the same function at almost the same time
+
+## An overview of the multiprocessing module
+
+The multiprocessing module is one of the most commonly used implementations of multiprocessing programming in Python.
+
+What it offers:
+- methods to spawn/interact with processes
+    - similar API to start() and join() in `threading`
+- allows both local AND remote concurrency
+    - local concurrency: parallel operations happening within a single system
+    - remote concurrency: managing parallel operations across different systems connected via a network
+- avoids the global interpreter lock by using subprocesses instead of threads
+    - GIL: a locking mechanism that ensures that only one thread can execute Python code at a time
+        - even on multi-core processors (!)
+
+## The process class
+
+In the `multiprocessing` module, processes are typically spawned and managed through the `Process` class.
+- Each `Process` object is an activity that executes in a separate process
+
+Specifically, utilizing an object-oriented programming approach, `multiprocessing.Process` provides the following resources:
+- `run()`: executed when a new process is init/started
+- `start()`: starts the initialized calling `Process` object
+    - calls the `run()` method
+- `join()`: method that waits for the calling `Process` object to terminate before continuing along in the program
+- `is_alive()`: returns boolean value for if it is currently executing
+- `name`: attribute with name
+- `pid`: attribute with process ID
+- `terminate()`: terminates the calling `Process` object
+
+As in the previous example, you can pass parameters to a function and execute it in a separate process:
+- `target`: target function
+- `args`: function params
+
+Note: If you want, you can override the default `Process()` constructor and implement your own `run()` function
+
+## The Pool class
+
+`Pool` class: mainly used to implement a pool of processes
+- each process carries out tasks that submit to a `Pool` object
+- Generally: `Pool` is more convenient than `Process`
+    - especially if the results returned from the concurrent application need to be in order
+
+Note: We have seen that the order of completion for items in a list can change when put through a function concurrently
+- This leads to difficulty when reordering the outputs to be like the inputs
+    - One possible solution: Create tuples of processes and their outputs, sort by process ID
+
+Luckily: This problem is addressed by the `Pool` class
+- `Pool.map()` and `Pool.apply()` ensure that returned values are in same order as input
+    - However, these methods block the main program
+        - `Pool.map_async()` and `Pool.apply_async()` can assist concurrency and parallelism
+
+## Determining the current process, waiting, and terminating processes
+
+The Process class provides a number of ways to easily interact with processes in a
+concurrent program.
+- In this section, we will explore the options of managing different processes by determining the current process, waiting, and terminating processes.
+
+
+## Determining the current process
+
+Working with processes is at times considerably difficult, and significant debugging is required.
+
+One method of debugging: Identify the processes that got errors
+- We can do this with the `name` attribute of the `Process` class
+- Naming processes is a better way to keep track of running processes (than passing an identifier to the target function itself - as we did earlier in Chapter06/example1.py)
+    - especially in applications with different types of processes running at the same time
+
+One powerful functionality of `multiprocessing` module: the current_process() method
+- will return the Process object that is currently running at any point of a program
+    - This is another way to keep track of running processes
+
+Let's look at an example in more detail:
+
+```py
+# ch6/example2.py
+
+from multiprocessing import Process, current_process
+import time
+
+
+def f1():
+    pname = current_process().name
+    print('Starting process %s...' % pname)
+    time.sleep(2)
+    print('Exiting process %s...' % pname)
+
+def f2():
+    pname = current_process().name
+    print('Starting process %s...' % pname)
+    time.sleep(4)
+    print('Exiting process %s...' % pname)
+
+
+if __name__ == '__main__':
+    p1 = Process(name='Worker 1', target=f1)
+    p2 = Process(name='Worker 2', target=f2)
+    p3 = Process(target=f1)
+
+    p1.start()
+    p2.start()
+    p3.start()
+
+    p1.join()
+    p2.join()
+    p3.join()
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example2.py
+
+```
+
+Output:
+
+```bash
+Starting process Worker 1...
+Starting process Worker 2...
+Starting process Process-3...
+Exiting process Worker 1...
+Exiting process Process-3...
+Exiting process Worker 2...
+
+```
+
+What is going on here:
+- 2 dummy functions: f1() and f2()
+    - each print out the name of the process that executes the function before and after sleeping
+- 3 separate process:
+    - Worker 1 and 2
+        - used f1(), so will exit after 2 seconds
+    - Process-3 (name assigned by default)
+        - used f2(), so will exit after 4 seconds
+- current_process() helps keep track of the processes that ran the functions
+
+Another way to keep tracking of running processes: look at individual process IDs via `os` module
+
+Let's see this example:
+
+```py
+# ch6/example3.py
+
+from multiprocessing import Process, current_process
+import time
+import os
+
+
+def print_info(title):
+    print(title)
+
+    if hasattr(os, 'getppid'):
+        print('Parent process ID: %s.' % str(os.getppid()))
+
+    print('Current Process ID: %s.\n' % str(os.getpid()))
+
+def f():
+    print_info('Function f')
+
+    pname = current_process().name
+    print('Starting process %s...' % pname)
+    time.sleep(1)
+    print('Exiting process %s...' % pname)
+
+
+if __name__ == '__main__':
+    print_info('Main program')
+
+    p = Process(target=f)
+    p.start()
+    p.join()
+
+    print('Done.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example3.py
+
+```
+
+Output:
+
+```bash
+Main program
+Parent process ID: 28400.
+Current Process ID: 20792.
+
+Function f
+Parent process ID: 20792.
+Current Process ID: 18232.
+
+Starting process Process-1...
+Exiting process Process-1...
+Done.
+
+```
+
+What is going on here:
+- `print_info()`: uses `os.getpid()` and `os.getppid()` to identify the current process (using its process ID)
+    - `os.getpid()`: returns process ID of current process
+    - `os.getppid()`: returns process ID of current process
+        - only available on Unix systems
+    
+- Tracking the processes:
+- cmd.exe: main program (28400)
+    - python.exe: starts a process (20792)
+        - python.exe: start a process (18232)
+
+(Look in Task Manager -> Details to find the PID/Process ID's)
+(If you want to find the process ID's because they are going away too fast, use time.sleep(10))
+
+## Waiting for processes
+
+Oftentimes, we'd like to wait for all of our concurrent processes to finish executing before moving to a new section of the program.
+- this is what `Process.join()` is for
+    - implements a way to wait until a process has completed its task and exits
+
+Sometimes: developers want something running in the background that does not block the main program from exiting
+- commonly used when there is no easy way for the main program to tell whether it is appropriate to interrupt the process OR when exiting the main program (without completing the worker) does not affect the end result
+- these processes are called *daemon processes*
+
+Daemon processes: runs in the background
+- default value: False
+
+Let's look at an example:
+
+```py
+# ch6/example4.py
+
+from multiprocessing import Process, current_process
+import time
+
+
+def f1():
+    p = current_process()
+    print('Starting process %s, ID %s...' % (p.name, p.pid))
+    time.sleep(4)
+    print('Exiting process %s, ID %s...' % (p.name, p.pid))
+
+def f2():
+    p = current_process()
+    print('Starting process %s, ID %s...' % (p.name, p.pid))
+    time.sleep(2)
+    print('Exiting process %s, ID %s...' % (p.name, p.pid))
+
+
+if __name__ == '__main__':
+    p1 = Process(name='Worker 1', target=f1)
+    p1.daemon = True
+    p2 = Process(name='Worker 2', target=f2)
+
+    p1.start()
+    time.sleep(1)
+    p2.start()
+
+```
+
+What is going on here:
+- f1(); long running function
+- f2(); faster function
+- 2 processes (p1/p2)
+    - p1: daemon processes assigned to long running function
+    - p2: regular processes assigned to faster function
+- How this works:
+    - start both processes via `.start()`
+    - we don't call `.join()`
+        - this means that a daemon process (ie. p1) can finish in the background
+
+Let's look at our output:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example4.py
+
+```
+
+```bash
+Starting process Worker 1, ID 18056...
+Starting process Worker 2, ID 2392...
+Exiting process Worker 2, ID 2392...
+```
+
+Notice how p1 does not print that it is exiting (because it is daemon, it finishes in the background AFTER the main program has finished!)
+
+The ability to terminate the main program without having to wait for specific tasks that the daemon is processing is indeed extremely useful.
+- Sometimes: We might want to wait for daemon processes for a specific amount of time before exiting
+    - this way, if the specifications of the program allow some waiting time for the process' execution, we could complete some potential daemon processes instead of terminating all of them prematurely
+
+The combination of daemon processes and the `join()` method can help us implement this architecture
+- especially given that while the `join()` method blocks the program execution indefinitely (or at least until the task finishes), you can pass a timeout argument to specify how long to wait
+
+Let's change the logic of the way we handle the daemon process in this next example (`f1()` and `f2()` are the same):
+
+```py
+# ch6/example5.py
+
+if __name__ == '__main__':
+    p1 = Process(name='Worker 1', target=f1)
+    p1.daemon = True
+    p2 = Process(name='Worker 2', target=f2)
+
+    p1.start()
+    time.sleep(1)
+    p2.start()
+
+    p1.join(1)
+    print('Whether Worker 1 is still alive:', p1.is_alive())
+    p2.join()
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example5.py
+
+```
+
+Output:
+
+```bash
+Starting process Worker 1, ID 16088...
+Starting process Worker 2, ID 596...
+Whether Worker 1 is still alive: True
+Exiting process Worker 2, ID 596...
+```
+
+What happened here:
+- start both processes via `.start()`
+- call `.join()` on both processes
+    - allow 1 second for p1 to finish
+        - if it doesn't finish in that 1 second, p2.join() is called and the program is done
+        - this is reinforced where before we exit, it prints that Worker 1 is still alive: True 
+
+### Terminating processes
+
+`terminate()`: a way to quickly terminate a process
+- what happens when this method is called:
+    - exit handlers/finally cause blocks/etc. are NOT executed
+    - descendant process are not terminated, though
+        - these are *orphaned processes*
+
+Although it can be frowned upon, terminating is sometimes necessary.
+- Some processes interact with inteprocess-communication resources
+    - such as locks, semaphores, pipes, or queues
+    - forcibly stopping those processes can cause them to be corrupted/unavailable to other processes
+- takeaway: if the processes in your program never interacts with the aforementioned resources, the `terminate()` method is very useful
+    - especially: if a process appears to be unresponsive/deadlocked
+
+One thing to note when using `terminate()`: even though the `Process` object is effectively killed, it is still important that you `.join()` on the object as well
+- the `alive` status is not always updated immediately after you call `terminate()`
+- this ensures the background system updates to reflect the terminated process
+
+## Interprocess communication
+
+communication/synchronization:
+- threads: locks
+- processes: pipes and queues
+    - they provide message-passing options between processes—pipes for connections between two processes and queues for multiple producers and consumers
+
+In this section, we will be exploring the usage of queues, specifically `multiprocessing.Queue`
+- `Queue` class is thread-and-process-safe
+- All pickleable objects in Python can be passed through a Queue object
+    - in this section, we will be using queues to pass messages back and forth between processes
+
+Using a message queuee for interprocess communication is preferred over having shared resources
+- if certain processes mishandle/corrupt shared memory and resources while being shared, then there will be undesirable/unpredictable effects
+- if a process failed to handle its message correctly, other items in the queue remain intact
+
+The following diagram represents the differences in architecture between using a message queue and shared resources (specifically memory) for interprocess communication:
+
+![The architecture involved in using a message queue and shared resources for interprocess communication](image-21.png)
+
+### Message passing for a single worker
+
+Before we dive into the example code in Python, first we need to discuss specifically how
+we use a `Queue` object in our multiprocessing application.
+
+Let's say that we have a worker class that performs heavy computations and does not require significant resource sharing/communication.
+
+Yet, these worker instances still need to be able to receive information from time to time during their execution.
+
+This is where the use of a queue comes in: when we put all the workers in a queue.
+- At the same time, we will also have a number of initialized processes
+    - each of which will go through that queue and process one worker.
+    - If a process has finished executing a worker and there are still other workers in the queue, it will move on to another worker and execute it.
+
+(Looking back at the earlier diagram, we can see that there are two separate processes that keep picking up and executing messages from a queue)
+
+Let's look at an example script showing the use of a queue in Python. Navigate to and open
+the Chapter06/example6.py file, as shown in the following code:
+
+```py
+# ch6/example6.py
+
+import multiprocessing
+
+class MyWorker():
+    def __init__(self, x):
+        self.x = x
+
+    def process(self):
+        pname = multiprocessing.current_process().name
+        print('Starting process %s for number %i...' % (pname, self.x))
+
+def work(q):
+    worker = q.get()
+    worker.process()
+
+if __name__ == '__main__':
+    my_queue = multiprocessing.Queue()
+
+    p = multiprocessing.Process(target=work, args=(my_queue,))
+    p.start()
+
+    my_queue.put(MyWorker(10))
+
+    my_queue.close()
+    my_queue.join_thread()
+    p.join()
+
+    print('Done.')
+
+```
+
+What is going on here:
+- `MyWorker` class that takes in a number x parameter and performs a computation from it
+- `work()`: gets the first item in the queue and processes it
+- Main function:
+    - Initialize a `Queue` object
+    - start a `Process`
+    - add a `MyWorker` object with number 10
+        - Process called work functions, so takes this and does work on it
+
+I guess the structure is designed to pass a message:
+- `MyWorker` object to one single process
+- The main program then waits for the process to finish executing
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example6.py
+
+```
+
+Output:
+
+```bash
+Starting process Process-1 for number 10...
+Done.
+```
+
+### Message passing between several worke
+
+As mentioned earlier, our goal is to have a structure where there are several processes
+constantly executing workers from a queue, and if a process finishes executing one worker,
+then it will pick up another.
+
+To do this, we will be utilizing a subclass of Queue called `JoinableQueue`, which will provide the additional `task_done()` and `join()` methods
+
+JoinableQueue is described in this list:
+- `task_done()`: This method tells the program that the calling `JoinableQueue` object is complete
+- `join()`: This method blocks until all items in the calling `JoinableQueue` object have been processed
+
+The goal here is to have a `JoinableQueue` object holding all tasks that need to be executed
+- let's call this the task queue
+- we also have a number of processes
+    - as long as there are items/messages in the task queue, the process will take their turn executing the items
+- a `Queue` object stores all the results returned from the processes
+    - this is the "result queue"
+
+In the next example, we take a look at the `Consumer` class and the `Task` class:
+
+```py
+# ch6/example7.py
+
+from math import sqrt
+import multiprocessing
+
+class Consumer(multiprocessing.Process):
+
+    def __init__(self, task_queue, result_queue):
+        multiprocessing.Process.__init__(self)
+        self.task_queue = task_queue
+        self.result_queue = result_queue
+
+    def run(self):
+        pname = self.name
+
+        while not self.task_queue.empty():
+
+            temp_task = self.task_queue.get()
+
+            print('%s processing task: %s' % (pname, temp_task))
+
+            answer = temp_task.process()
+            self.task_queue.task_done()
+            self.result_queue.put(answer)
+
+class Task():
+    def __init__(self, x):
+        self.x = x
+
+    def process(self):
+        if self.x < 2:
+            return '%i is not a prime number.' % self.x
+
+        if self.x == 2:
+            return '%i is a prime number.' % self.x
+
+        if self.x % 2 == 0:
+            return '%i is not a prime number.' % self.x
+
+        limit = int(sqrt(self.x)) + 1
+        for i in range(3, limit, 2):
+            if self.x % i == 0:
+                return '%i is not a prime number.' % self.x
+
+        return '%i is a prime number.' % self.x
+
+    def __str__(self):
+        return 'Checking if %i is a prime or not.' % self.x
+
+if __name__ == '__main__':
+
+    tasks = multiprocessing.JoinableQueue()
+    results = multiprocessing.Queue()
+
+    # spawning consumers with respect to the
+    # number cores available in the system
+    n_consumers = multiprocessing.cpu_count()
+    print('Spawning %i consumers...' % n_consumers)
+    consumers = [Consumer(tasks, results) for i in range(n_consumers)]
+    for consumer in consumers:
+        consumer.start()
+
+    # enqueueing jobs
+    my_input = [2, 36, 101, 193, 323, 513, 1327, 100000, 9999999, 433785907]
+    for item in my_input:
+        tasks.put(Task(item))
+
+    tasks.join()
+
+    for i in range(len(my_input)):
+        temp_result = results.get()
+        print('Result:', temp_result)
+
+    print('Done.')
+
+```
+
+What is going on here:
+- `Consumer` class: inherits from `multiprocessing.Process`
+    - processor logic ie. takes in a task queue and result queue
+    - when started, each `Consumer` object will:
+        - get the next item in task queue
+            - each item is `Task` class
+            - main function: prime check its `x` param
+        - execute it
+        - call `task_done()`
+        - put returned result in the result queue
+
+- Main Program:
+    - create task queue/result queue
+    - create list of `Consumer` objects
+        - `start()` them all
+        - number of processes corresponds to number of CPUs available
+    - list of inputs with heavy computational tasks
+        - init them as `Task` objects
+        - put all in task queue
+            - at this point, `Consumer` starts executing tasks
+    - end of function: `join()` is called on task queue
+        - makes sure all items have been executed
+    - print out results via result queue
+
+Let's run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example7.py
+
+```
+
+Output:
+
+```bash
+Spawning 8 consumers...
+Consumer-1 processing task: Checking if 2 is a prime or not.
+Consumer-1 processing task: Checking if 36 is a prime or not.
+Consumer-1 processing task: Checking if 101 is a prime or not.
+Consumer-3 processing task: Checking if 193 is a prime or not.
+Consumer-4 processing task: Checking if 323 is a prime or not.
+Consumer-1 processing task: Checking if 513 is a prime or not.
+Consumer-1 processing task: Checking if 1327 is a prime or not.
+Consumer-1 processing task: Checking if 100000 is a prime or not.
+Consumer-3 processing task: Checking if 9999999 is a prime or not.
+Consumer-2 processing task: Checking if 433785907 is a prime or not.
+Result: 2 is a prime number.
+Result: 36 is not a prime number.
+Result: 101 is a prime number.
+Result: 513 is not a prime number.
+Result: 1327 is a prime number.
+Result: 193 is a prime number.
+Result: 100000 is not a prime number.
+Result: 323 is not a prime number.
+Result: 9999999 is not a prime number.
+Result: 433785907 is a prime number.
+Done.
+```
+
+most of the tasks were executed by either Consumer-2 or Consumer-3, and that Consumer-4 executed only one task while Consumer-1 failed to execute any. What happened here?
+- Example: when one of our consumers—let's say Consumer-3—finished executing a task, it tried to look for another task to execute immediately after
+    - Most of the time: It gets priority over other consumers (since it was already being run by the main program)
+
+This situation is undesirable for us, since the program is not utilizing all of the available processes that were created at the beginning of the program.
+- To address this issue, a technique has been developed, to stop consumers from immediately
+taking the next item from the task queue, called poison pill.
+
+Poison pill: allows other consumers to get the next item in the task queue first
+- after setting up the real tasks in the task queue, we also add in dummy tasks that contain "stop" values
+    - this will have the current consumer hold
+
+How to implement this technique:
+- Add in "special objects" (None) our `tasks` value in the main program
+    - one per consumer
+- `Consumer` class to handle the special objects
+    - it will print out exiting, mark `self.task_queue.task_done()`, and then break loop (ie. terminate process)
+
+Let's look at our changes to the code in Example 8:
+
+```py
+# ch6/example8.py
+
+class Consumer(multiprocessing.Process):
+
+    def __init__(self, task_queue, result_queue):
+        multiprocessing.Process.__init__(self)
+        self.task_queue = task_queue
+        self.result_queue = result_queue
+
+    def run(self):
+        pname = self.name
+
+        while True:
+            temp_task = self.task_queue.get()
+
+            # ADDED LOGIC TO HANDLE POISON PILL
+            if temp_task is None:
+                print('Exiting %s...' % pname)
+                self.task_queue.task_done()
+                break
+
+            print('%s processing task: %s' % (pname, temp_task))
+
+            answer = temp_task.process()
+            self.task_queue.task_done()
+            self.result_queue.put(answer)
+
+if __name__ == '__main__':
+
+    ...
+
+    my_input = [2, 36, 101, 193, 323, 513, 1327, 100000, 9999999, 433785907]
+    for item in my_input:
+        tasks.put(Task(item))
+
+    # ADDING 1 POISON PILL/SPECIAL MESSAGE FOR EACH CONSUMER
+    for i in range(n_consumers):
+        tasks.put(None)
+
+    tasks.join()
+
+    ...
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter06/example8.py
+```
+
+Output:
+
+```bash
+Spawning 8 consumers...
+Consumer-1 processing task: Checking if 2 is a prime or not.
+Consumer-4 processing task: Checking if 36 is a prime or not.
+Consumer-1 processing task: Checking if 101 is a prime or not.
+Consumer-1 processing task: Checking if 193 is a prime or not.
+Consumer-1 processing task: Checking if 323 is a prime or not.
+Consumer-1 processing task: Checking if 1327 is a prime or not.
+Consumer-1 processing task: Checking if 100000 is a prime or not.
+Consumer-1 processing task: Checking if 9999999 is a prime or not.
+Consumer-2 processing task: Checking if 433785907 is a prime or not.
+Exiting Consumer-1...
+Consumer-4 processing task: Checking if 513 is a prime or not.
+Exiting Consumer-4...
+Exiting Consumer-3...
+Exiting Consumer-2...
+Exiting Consumer-5...
+Exiting Consumer-7...
+Exiting Consumer-8...
+Exiting Consumer-6...
+Result: 2 is a prime number.
+Result: 101 is a prime number.
+Result: 193 is a prime number.
+Result: 36 is not a prime number.
+Result: 323 is not a prime number.
+Result: 1327 is a prime number.
+Result: 100000 is not a prime number.
+Result: 9999999 is not a prime number.
+Result: 513 is not a prime number.
+Result: 433785907 is a prime number.
+Done.
+```
+
+This time, as well as seeing the poison pill messages being printed out, the output also
+shows a significantly better distribution in terms of which consumer executed which task
+
+(I didn't exactly see this, but the example in the book did)
+
+![Example at end of Chapter 6](image-22.png)
+
+## Summary
+
+process: an instance of a specific computer program or software that is being executed by the operating system
+- contains program code and current activities/interactions with other entities
+- more than 1 thread can be implemented within 1 process
+    - they share memory and resources (2 processes do not interact this way)
+
+In the context of concurrency and parallelism: multiprocessing refers to the execution of
+2+ concurrent processes where each process is executed on a separate CPU (as opposed to a single process being executed sequentially)
+
+The `multiprocessing` module in Python provides a powerful API to spawn and manage processes for a multiprocessing application.
+- It also allows complex techniques for interprocess communication via the `Queue` class.
+
+In the next chapter, we will be discussing a more advanced function of Python - reduction operations - and how it is supported in multiprocessing programming.
+
+# 7 - Reduction Operators in Processes
+
+Concept of reduction operators: many/all elements of an array are reduced into 1 single result
+- closely associated with concurrent and parallel programming!
+    - because of the associative and communicative nature of the operators, concurrency and parallelism can be applied
+
+This chapter discusses the theoretical concurrent approach to designing and writing a reduction operator from the perspective of programmers and developers.
+
+From here, this chapter also makes connections to similar problems that can be solved using concurrency in similar ways.
+
+The following topics will be covered in this chapter:
+- The concept of a reduction operator in computer science
+- The communicative and associative properties of reduction operators, and therefore the reason why concurrency can be applied
+- How to identify problems that are equivalent to a reduction operator
+    - and how to apply concurrent programming in such cases
+
+## The concept of reduction operators
+
+As experienced programmers, you have undoubtedly encountered these situations:
+- you need to calculate the sum or the product of all the numbers in an array
+- you need to compute the result of applying the AND operator to all Boolean elements of an array (to see whether there is any false value in that array)
+
+These are called reduction operators:
+- takes a set/array of elements and performs some computation to return only 1 single result.
+
+### Properties of a reduction operator
+
+Not every mathematical or computer science operator is a reduction operator.
+- even if an operator is capable of reducing an array of elements into one single value, there is no
+guarantee that it is a reduction operator. 
+
+An operator is a reduction operator if it satisfies the following conditions:
+1. The operator can reduce an array of elements into one scalar value
+- "reduction operators" ie. all elements of input array are combined and reduced into 1 scalar
+2. The end result (the scalar value) must be obtained through creating and computing partial tasks
+- this is in terms of concurrencyparallelism. (It requires the computation of any reduction operator, to be able to be divided into smaller partial computations.)
+
+First, let's consider one of the most common reduction operators: addition.
+
+For example, consider the input array [1, 4, 8, 3, 2, 5]—the sum of the elements in this array is as
+follows:
+
+```bash
+1 + 4 + 8 + 3 + 2 + 5
+= ((((1 + 4) + 8) + 3) + 2) + 5
+= (((5 + 8) + 3) + 2) + 5
+= ((13 + 3) + 2) + 5
+= (16 + 2) + 5
+= 18 + 5
+= 23
+```
+
+We just reduced the numbers in our array into the sum of 23 in a sequential order.
+- we went through each and every element of the array from the beginning to the end and added the current sum
+
+Now, we know that addition is a commutative and associative operator, which means: `a + b = b + a` and `(a + b) + c = a + (b + c)`.
+
+Therefore, we can perform the preceding computation in a more efficient way by breaking
+the summation into smaller summations:
+
+```bash
+1 + 4 + 8 + 3 + 2 + 5
+= ((1 + 4) + (8 + 3)) + (2 + 5)
+= (5 + 11) + 7
+= 16 + 7
+= 23
+
+```
+
+This technique is at the heart of applying concurrency and parallelism (specifically multiprocessing) to a reduction operator.
+- By breaking the whole task into smaller subtasks, multiple processes can perform those small computations simultaneously
+- the system can get to the result much faster this way
+
+For the same reason, the communicative and associative properties are considered to be equivalent to the requirements for a reduction operator that we discussed earlier.
+- In other words, the operator is a reduction operator that's communicative and associative.
+- Specifically the following:
+    - Communicative: a b = b a
+    - Associative: (a b) c = a (b c)
+
+Here a, b, and c are elements of input arrays.
+
+So, if an operator is a reduction operator, it has to be communicative and associative, and
+therefore has the ability to break down a big task into smaller, more manageable subtasks,
+which can be computed in a more efficient way using multiprocessing.
+
+## Examples and non-examples
+
+### Examples
+
+So far, we have seen that addition is one example of a reduction operator. Steps:
+1. divide the elements from input array into groups of 2
+- each group of 2 is a subtask
+2. perform addition on each group
+3. take the added result from each group, divide into groups of two again
+- repeat until we arrive at 1 number
+
+This is a binary tree (uses groups of two to form subtasks)
+
+![Diagram of binary tree reduction for addition](image-23.png)
+
+```
+[1, 4, 8, 3, 2, 5, ]
+-> 
+[1, 4] , [8, 3] , [2, 5]
+[5], [11], [7]
+-> 
+[5, 11], [7]
+[16], [7]
+-> 
+[23]
+```
+
+The most processes (brackets) that we ever had was 3.
+- With 3 CPUs or more, we can do this operation in log2(6) = 3 steps
+    - sequential takes 5 steps
+
+Other common examples of reduction operators are multiplication and logical AND.
+
+Example; reducing the same array of numbers [1, 4, 8, 3, 2, 5] using multiplication as a
+reduction operator would be done as follows:
+
+```
+1 x 4 x 8 x 3 x 2 x 5
+= ((1 x 4) x (8 x 3)) x (2 x 5)
+= (4 x 24) x 10
+= 96 x 10
+= 960
+
+```
+
+To reduce an array of Boolean values, for example (True, False, False, True), using the
+logical AND operator, we could do the following:
+
+```
+True AND False AND False AND True
+= (True AND False) AND (False AND True)
+= False AND False
+= False
+```
+
+### Non-examples
+
+A non-example of reduction operators is the power function
+- changing the order of computation would change the final result (that is, the function is not communicative)
+
+For example, reducing the array [2, 1, 2] sequentially would give us the following:
+
+```
+2 ^ 1 ^ 2 = 2 ^ (1 ^ 2) = 2 ^ 1 = 2
+```
+
+And if we were to change the order of operation as follows:
+
+```
+(2 ^ 1) ^ 2 = 2 ^ 2 = 4
+```
+
+We would obtain a different value. Therefore, the power function is not a reduction operation.
+
+## Example implementation in Python
+
+As we mentioned previously, due to their communicative and associative properties,
+reduction operators can have their partial tasks created and processed independently, and
+this is where concurrency can be applied.
+- To truly understand how a reduction operator utilizes concurrency, let's try implementing a concurrent, multiprocessing reduction operator from scratch—specifically the add operator.
+
+In this example, we will be using:
+-  a task queue + a result queue: facilitates our interprocess communication
+    - program stores all numbers of the input array in the task queue (as individual tasks)
+    - as each consumer/process executes, it will call `get()` on the task queue 2x to get 2 task numbers
+        - except; edge case where there is 0/1 numbers left in task queue (ie. when num1/num2 is None, `ReductionConsumer` handles this poison pill)
+    - add numbers together and return to result queue
+- after we iterate through the task queue 1x, the # of elements in the input array will be cut in half
+- next, the program assigns the new task queue to be the result queue, and result queue init a new queue
+- this repeats until
+
+Remember: `multiprocessing.JoinableQueue` implements our task queues
+- requirements: call `task_done()` after each time `get()` is called
+    - if not, `join()` for that task queue will block the main program
+    - point of this: if you call `get()` 2x, then call `task_done()` 2x
+- Note: This is one of the more complex considerations while working with multiprocessing programs that facilitate interprocess communication.
+
+To process and coordinate different consumer processes as well as manipulate the task
+queue and the result queue after each iteration, we have a separate function called `reduce_sum()`:
+- takes a python list of numbers
+    - puts them in results so that the algorithm can start with `tasks = results`
+- spawns consumer processes
+- keeps track of result_size ie. # of elements in the result queue
+    - if this dips to 1, we can return the results queue
+
+Let's run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python Mastering-Concurrency-in-Python/Chapter07/example1.py
+
+```
+
+Output:
+
+```bash
+C:\Users\Myles\mastering_concurrency_in_python>python Mastering-Concurrency-in-Python/Chapter07/example1.py
+Using process ReductionConsumer-4...
+Running process ReductionConsumer-4 on numbers 0 and 1.
+Running process ReductionConsumer-4 on numbers 2 and 3.
+Running process ReductionConsumer-4 on numbers 4 and 5.
+Running process ReductionConsumer-4 on numbers 6 and 7.
+Running process ReductionConsumer-4 on numbers 8 and 9.
+Running process ReductionConsumer-4 on numbers 10 and 11.
+Running process ReductionConsumer-4 on numbers 12 and 13.
+Running process ReductionConsumer-4 on numbers 14 and 15.
+Running process ReductionConsumer-4 on numbers 16 and 17.
+Running process ReductionConsumer-4 on numbers 18 and 19.
+...
+Using process ReductionConsumer-33...
+Exiting process ReductionConsumer-33.
+Using process ReductionConsumer-37...
+Exiting process ReductionConsumer-37.
+Final result: 190.
+```
+
+Note: This looks wrong
+
+## Real-life applications of concurrent reduction operators
+
+communicative/associative nature of reduction operators lets subtasks be processed by themselves
+- that is why it is connected to concurrency + parallelism!
+
+Prime applications:
+- Numpy: code is implemented to be as parallelizable as possible
+- Real world applications:
+    - Communication w/ sockets/ports
+    - Finite state machines
+    - Compresson/encryption techniques 
+
+## Summary
+
+You must be careful when using multiprocessing for reduction operators (ie. converting a vector to a scalar)
+- especially: program has task queues and result queues to let processes communicate
+
+Next chapter: Image processing
+- multiprocessing is applied in these applications
+
+# Chapter 8 - Concurrent Image Processing
 
