@@ -13,6 +13,12 @@ Topics:
 - The specific topics that will be covered in each section/chapter of the book
 - How to set up a Python environment, and how to check out/download code from GitHub
 
+## Technical requirements
+
+Steps:
+1. Download Python 3
+2. Download the github repo from https://github.com/PacktPublishing/Mastering-Concurrency-in-Python/
+
 ## What is concurrency?
 
 Concurrent programming: one of the most prominent ways to effectively process data
@@ -3339,7 +3345,9 @@ The `multiprocessing` module in Python provides a powerful API to spawn and mana
 
 In the next chapter, we will be discussing a more advanced function of Python - reduction operations - and how it is supported in multiprocessing programming.
 
-# 7 - Reduction Operators in Processes
+---
+
+# Chapter 7 - Reduction Operators in Processes
 
 Concept of reduction operators: many/all elements of an array are reduced into 1 single result
 - closely associated with concurrent and parallel programming!
@@ -3582,5 +3590,848 @@ You must be careful when using multiprocessing for reduction operators (ie. conv
 Next chapter: Image processing
 - multiprocessing is applied in these applications
 
+---
+
 # Chapter 8 - Concurrent Image Processing
 
+this chapter: processesing/manipulating images w/ concurrent programming
+- multiprocessing is key
+    - images are processed independently of one another, so concurrency speeds it up
+
+The following topics will be covered in this chapter:
+- The idea behind image processing and a number of basic techniques in image
+processing
+- How to apply concurrency to image processing, and how to analyze the
+improvements it provides
+- Best practices in concurrent image processing
+
+## Technical requirements
+
+### Installing OpenCV and NumPy
+
+NumPy:
+
+```bash
+pip install numpy
+```
+
+OpenCV (Windows):
+1. Download the most recent OpenCV build on [Sourceforge](https://sourceforge.net/projects/opencvlibrary/files/)
+- I downloaded 4.10.0 ie. opencv-4.10.0-windows.exe
+    - Self-extracting software will download it to Downloads
+        - I moved it to C:\Program Files ie. C:\Program Files\opencv
+2. Finalize the installation by setting the OpenCV environment variable and add it to the systems path section
+- add the bin folders path to the systems path
+    - Find the location for the .dll file ie. C:\Program Files\opencv\build\bin
+        - Note: DLL: Dynamic-link libraries
+            - Inside these are stored all the algorithms and information the OpenCV library contains.
+            - The operating system will load them only on demand, during runtime
+    - Edit the system environment variables -> Environment Variables -> System variables -> New...
+        - Variable name: OPENCV_DIR
+        - Variable value: C:\Program Files\opencv\build\bin
+
+After reseting your device, VSCode should now be able to find your instance of OpenCV.
+
+Verify:
+
+```bash
+pip install opencv-python
+
+python
+import cv2
+print(cv2.__version__)
+exit()
+
+```
+
+Output:
+
+```bash
+4.10.0
+```
+
+## Image processing fundamentals
+
+image processing is so popular nowadays that it exists in many facets of everyday life
+- taking a picture with filters
+- image editing (Adobe)
+- microsoft paint
+
+Many of the techniques and algorithms used in image processing were developed in the
+early 1960s for various purposes such as medical imaging, satellite image analysis,
+character recognition, and so on
+- these image processing techniques required
+significant computing power
+- the fact that the available computer equipment at the
+time was unable to accommodate the need for fast number-crunching slowed down the use
+of image processing.
+- Fast-forwarding to the future, where powerful computers with fast, multicore processors
+were developed, image processing techniques consequently became much more accessible,
+and research on image processing increased significantly.
+- Nowadays, numerous image processing applications are being actively developed and studied, including pattern recognition, classification, feature extraction, and so on
+    - Examples: Hidden Markov Models, independent component analysis, neural-network models
+
+![One sample use of image processing grayscaling](image-24.png)
+
+## Python as an image processing tool
+
+Python is very popular with computational image processing
+- digital images are usually in 2-D/3-D matrices (lets computers process them easily)
+- most of the time: image processing requires matrix calculations
+    - Python provides libraries for this
+        - as well as image reading/writing
+
+This chapter - two main Python libraries:
+- OpenCV (Open Source Computer Vision)
+    - provides image processing and computer vision options in C++, Java, and Python
+- NumPy
+    - one of the most popular Python modules and performs efficient and
+parallelizable number-crunching calculations
+
+
+## Computer image basics
+
+Before we jump into processing and manipulating digital image files, we first need to
+discuss the fundamentals of those files, and how computers interpret data from them.
+- Specifically, we need to understand how data regarding the colors and coordinates of
+individual pixels in an image file is represented, and how to extract it using Python.
+
+## RGB values
+
+RGB values: the basics of how colors are represented digitally.
+- Standing for Red, Green, and Blue, RGB values are constructed from the fact that all colors can be generated from a specific combination of red, green, and blue.
+- An RGB value therefore is a tuple of three integer numbers
+    - each of which ranges from 0 (which indicates no color at all) to 255 (which indicates the deepest shade of that specific color).
+- examples:
+    - red: (255, 0, 0)
+        - highest value for red (255)
+        - lowest value for green (0)
+        - lowest value for blue (0)
+    - yellow: (255, 255, 0)
+        - highest value for red (255)
+        - highest value for green (255)
+        - lowest value for blue (0)
+    - white: (255, 255, 255)
+        - highest value for red (255)
+        - highest value for green (255)
+        - highest value for blue (255)
+    - black: (0, 0, 0)
+        - lowest value for red (0)
+        - lowest value for green (0)
+        - lowest value for blue (0)
+
+![RGB values basics](image-25.png)
+
+## Pixels and image files
+
+So, an RGB value indicates a specific color, but how do we connect this to a computer
+image?
+- If we were to view an image on our computer and try to zoom in as much as we can, we would observe that as we zoom in deeper and deeper, the image will start breaking apart into increasingly discernible colored squares
+    - these squares are called pixels (which are the smallest units of color on a computer display or in a digital image)
+
+![Examples of pixels in digital images](image-26.png)
+
+A set of different pixels arranged in a tabular format (rows and columns of pixels) makes
+up a computer image.
+- each pixel is an RGB value
+
+What this all means:
+- each computer image is a 2-D array of tuples
+    - sides: correspond to the size of the image
+    - example: a 128x128 image has 128 rows/columns of RGB tuples
+
+## Coordinates inside an image
+
+Similar to indexing for two-dimensional arrays, the coordinate for a digital image pixel is a
+pair of two integers, representing the x- and y-coordinates of that pixel;
+- the x-coordinate
+indicates the pixel's location along the horizontal axis starting from the left
+- the ycoordinate indicates the pixel's location along the vertical axis starting from the top.
+
+Here, we can see how heavy computational number-crunching processes are typically
+involved when it comes to image processing (with the help of the NumPy library and concurrent programming, we can have significant improvements in execution time)
+
+Indexing of the pixels in a 2-D array in NumPy:
+- first number: row (y-coordinate)
+- second number: column (x-coordinate)
+
+## OpenCV API
+
+There are a surprising number of methods to read in, perform image processing, and
+display a digital image file in Python. However, OpenCV provides some of the easiest and
+most intuitive APIs to do this.
+- One important thing to note regarding OpenCV is that it
+actually inverts RGB values to BGR values when interpreting its images, so instead of red,
+green, and blue in order, the tuples in an image matrix will represent blue, green, and red,
+in that order.
+
+Let's look at an example of interacting with OpenCV in Python. Let's a take look at
+the Chapter08/example1.py file:
+
+```py
+# ch8/example1.py
+
+import cv2
+
+im = cv2.imread('input/ship.jpg')
+cv2.imshow('Test', im)
+cv2.waitKey(0) # press any key to move forward here
+
+print(im)
+print('Type:', type(im))
+print('Shape:', im.shape)
+print('Top-left pixel:', im[0, 0])
+
+print('Done.')
+
+```
+
+What is going on here:
+- Read in a .jpg file via `cv2.imread()`
+- Show the file via `cv2.imshow()`
+- Keep the image on the screen via `cv2.waitKey()`
+- Print some info about the input image ie. numpy array
+
+Methods used from API:
+- cv2.imread():
+    - input: a path to an image file (common file extensions include .jpeg, .jpg, .png, and so on)
+    - returns an image object (NumPy array)
+
+- cv2.imshow():
+    - inputs: a string and an image object
+        - string: title
+            - The title of the window is specified by the passed-in string
+        - image object: the NumPy array from cv2.imread()
+    - outputs: displays the image in a separate window
+    - Note: This method should always be followed by the cv2.waitKey() method.
+
+- cv2.waitKey():
+    - input: a number
+        - blocks the program for a corresponding number of milliseconds
+            - unless: the number 0 is passed in (will block indefinitely until the user presses a key on their keyboard)
+    - Note: This method should always follow the cv2.imshow() method
+
+After calling cv2.imshow() on the ship.jpg file inside the input subfolder so that it's
+displayed from the Python interpreter, the program will stop until a key is pressed, at
+which point it will execute the rest of the program. If run successfully, the script will
+display the following image:
+
+Run the program (File paths are relative, so you must cd into the correct folder):
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example1.py
+
+```
+
+Output:
+
+![Output from Chapter 8, Example 1](image-27.png)
+
+After pressing a key to make the ship disappear, you should see this print to your console/terminal:
+
+```bash
+C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter08>python example1.py
+[[[199 136  86]
+  [199 136  86]
+  [199 136  86]
+  ...
+  [198 140  81]
+  [197 139  80]
+  [201 143  84]]
+
+[...Truncated for readability...]
+
+ [[ 56  23   4]
+  [ 59  26   6]
+  [ 59  28   7]
+  ...
+  [ 79  43   7]
+  [ 80  44   8]
+  [ 75  39   3]]]
+Type: <class 'numpy.ndarray'>
+Shape: (1118, 1577, 3)
+Top-left pixel: [199 136  86]
+Done.
+```
+
+The output confirms a few of the things that we discussed earlier:
+- First, when printing out the image object returned from the cv2.imread() function, we obtained a matrix of numbers.
+- Using the type() method from Python, we found out that the class of this matrix is indeed a NumPy array: numpy.ndarray.
+- Calling the shape attribute of the array, we can see that the image is a threedimensional matrix of the shape (1118, 1577, 3), which corresponds to a table with 1118 rows and 1577 columns, each element of which is a pixel (threenumber tuple).
+    - The numbers for the rows and columns also correspond to the size of the image.
+- Focusing on the top-left pixel in the matrix (the first pixel in the first row, that is, im[0, 0]), we obtained the BGR value of (199, 136, 86)
+    - 199 blue, 136 green, and 86 red.
+    - By looking up this BGR value through any online converter, we can see that this is a light blue that corresponds to the sky, which is the upper part of the image.
+
+Remember: (199, 136, 86) is the top left pixel, which is light blue
+- 199 blue
+- 136 green
+- 86 red
+- Location: im[0, 0]
+    - first 0: row 0
+    - second 0: column 0
+
+## Image processing techniques
+
+We have already seen some Python APIs that are provided by OpenCV to read in data from
+image files.
+- Before we can use OpenCV to perform various image processing tasks, let's
+discuss the theoretical foundation for a number of techniques that are commonly used in
+image processing.
+
+### Grayscaling
+
+Grayscaling: process of reducing the dimensionality of the image pixel matrix
+- considers only the intensity information of each pixel
+    - represented by the amount of light available
+- one of the most used image processing techniques
+- as a result: images no longer hold 3-D information
+    - before: 3-D (red/green/blue)
+    - after: 1-D (black and white)
+        - 0: black
+        - 255: white
+
+Grayscaling serves a number of important purposes in image processing:
+- reduces dimensionality
+    - instead of processing 3 layers of color data, only process 1/3 of the job with grayscale
+    - by only representing colors using one
+    spectrum, important patterns in the image are more likely to be recognized with just black
+    and white data.
+- There are multiple algorithms for converting color to grayscale: colorimetric conversion, luma coding, single channel, and so on.
+    - Luckily, we do not have to implement one ourselves, as the OpenCV library provides a one-line method to convert normal images to grayscale ones (`cv2.cvtColor()`)
+
+Let's look at the Chapter08/example2.py file:
+
+```py
+# ch8/example2.py
+
+import cv2
+
+im = cv2.imread('input/ship.jpg')
+gray_im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+cv2.imshow('Grayscale', gray_im)
+cv2.waitKey(0)
+
+print(gray_im)
+print('Type:', type(gray_im))
+print('Shape:', gray_im.shape)
+cv2.imwrite('output/gray_ship.jpg', gray_im)
+
+print('Done.')
+
+```
+
+In this example, we are using the cvtColor() method from OpenCV to convert our
+original image to a grayscale one. After running this script, the following image should be
+displayed on your computer:
+
+![Output from Grayscaling](image-28.png)
+
+Let's run the code and check:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example2.py
+
+```
+
+It worked! Here is the text output in the console (after pressing any key to unblock the program):
+
+```bash
+C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter08>python example2.py
+[[128 128 128 ... 129 128 132]
+ [125 125 125 ... 129 128 130]
+ [124 125 125 ... 129 129 130]
+ ...
+ [ 20  21  19 ...  38  39  37]
+ [ 19  22  21 ...  41  42  37]
+ [ 21  24  25 ...  36  37  32]]
+Type: <class 'numpy.ndarray'>
+Shape: (1118, 1577)
+Done.
+```
+
+We can see that the structure of our grayscale image object is different from what we saw
+with our original image object.
+- Even though it is still represented by a NumPy array, it is now a two-dimensional array of integers, each of which ranges from 0 (for black) to 255 (for white).
+- The table of pixels, however, still consists of 1118 rows and 1577 columns.
+
+In this example, we also used the cv2.imwrite() method
+- saves the image object to your local computer.
+- The grayscale image can therefore be found in the output subfolder of this chapter's folder (as specified in our code)
+
+## Thresholding
+
+Another important technique in image processing is thresholding. With the goal of
+categorizing each pixel in a digital image into different groups (also known as image
+segmentation), thresholding provides a quick and intuitive way to create binary images
+(with just black and white pixels).
+
+Idea behind thresholding: Replace each pixel in an image
+- if the pixel's intensity is greater than a threshold: replace with white pixel
+- if the pixel's intensity is less than a threshold: replace with black pixel
+
+Similar to the goal of grayscaling, thresholding amplifies the differences between high- and low-intensity pixels, and from that important features and patterns in an image can be recognized and extracted.
+- Just like with grayscaling, thresholding also significantly reduces the complexity of our image data (each pixel of
+which is now only either 0 (black) or 255 (white))
+
+Key to an effective thresholding process: finding an appropriate threshold
+- segments the pixels in an image in a way that lets separate regions in the image to become more obvious
+- most simple form: use a constant threshold to process all pixels throughout a whole image
+
+Let's consider an example of this method in the Chapter08/example3.py file:
+
+```py
+# ch8/example3.py
+
+import cv2
+
+im = cv2.imread('input/ship.jpg')
+gray_im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+ret, custom_thresh_im = cv2.threshold(gray_im, 127, 255, cv2.THRESH_BINARY)
+cv2.imwrite('output/custom_thresh_ship.jpg', custom_thresh_im)
+
+print('Done.')
+
+```
+
+In this example, after converting the image of a ship that we have been using to grayscale,
+we call the `threshold(src, thresh, maxval, type)` function from OpenCV, which takes in the following arguments:
+- `src`: takes in the input/source image.
+- `thresh`: constant threshold to be used throughout the image. Here, we are
+using 127, as it is simply the middle point between 0 and 255.
+- `maxval`: Pixels whose original values are greater than the constant threshold will
+take this value after the thresholding process. We pass in 255 to specify that those
+pixels should be completely white.
+- `type`: indicates the thresholding type used by OpenCV. We are
+performing a simple binary thresholding, so we pass in cv2.THRESH_BINARY.
+
+After running the script, you should be able to find the following image in the output with
+the name `custom_thresh_ship.jpg`:
+
+![Output from simple thresholding](image-29.png)
+
+Let's run the code and double check that it works:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example3.py
+
+```
+
+It worked!
+
+We can see that with a simple threshold (127), we have obtained an image that highlights
+separate regions of the image: the sky, the ship, and the sea.
+- However, there are a number of problems that this method of simple thresholding poses
+    - the most common of which is finding the appropriate constant threshold.
+        - Since different images have different color tones, lighting conditions, and so on, it is undesirable to use a static value across different images as their threshold.
+
+    - vThis issue is addressed by adaptive thresholding methods
+        - calculate the dynamic thresholds for small regions of an image
+        - This process allows the threshold to adjust according to the input image, and not depend solely on a static value
+
+Let's consider two examples of these adaptive thresholding methods, namely Adaptive Mean Thresholding and Adaptive Gaussian Thresholding. Navigate to the Chapter08/example4.py file:
+
+```py
+# ch8/example4.py
+
+import cv2
+
+im = cv2.imread('input/ship.jpg')
+im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+
+mean_thresh_im = cv2.adaptiveThreshold(im, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+cv2.imwrite('output/mean_thresh_ship.jpg', mean_thresh_im)
+
+gauss_thresh_im = cv2.adaptiveThreshold(im, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+cv2.imwrite('output/gauss_thresh_ship.jpg', gauss_thresh_im)
+
+print('Done.')
+
+```
+
+What is going on here:
+- convert the original image to its grayscale version, and then we pass it to the `adaptiveThreshold()` method from OpenCV
+    - Similar to what we did with the cv2.threshold() method earlier
+    - This method takes in similar arguments to the cv2.threshold() method
+        - instead of taking in a constant to be the threshold, it takes in an argument for the adaptive method.
+            - We used `cv2.ADAPTIVE_THRESH_MEAN_C` and `cv2.ADAPTIVE_THRESH_GAUSSIAN_C`, respectively
+- 2nd to last argument: size of the window performing thresholding
+    - must be odd positive integer
+    - example: 11
+        - for each pixel in the image, the algorithm considers the neighboring 11x11 square of pixels (surrounding )the current pixel
+- last argument: adjustment to make for each pixel in the final output
+    - these final 2 arguments help localize the threshold for different regions of the image (makes thresholding process more dynamic/adaptive)
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example4.py
+
+```
+
+After running the script, you should be able to find the following images as output with the
+names mean_thresh_ship.jpg and gauss_thresh_ship.jpg.
+
+The output for `mean_thresh_ship.jpg` is as follows:
+
+![Output from mean thresholding](image-30.png)
+
+The output for `gauss_thresh_ship.jpg` is as follows:
+
+![Output from Gaussian thresholding](image-31.png)
+
+Simple thresholding vs. Adaptive:
+- Simple: Useful when we want to extract big regions of an image
+- Adaptive: Recognizes the small details in an image
+
+## Applying concurrency to image processing
+
+In this section, we will be looking at a specific example on
+how to implement a concurrent image processing application that can handle a large
+number of input images.
+
+First, head to the current folder for this chapter's code.
+- Inside the input folder, there is a subfolder called large_input
+    - contains 400 images that we will be using for this example.
+    - These pictures are different regions in our original ship image (which have been cropped from it using the array-indexing and -slicing options that NumPy provides to slice OpenCV image objects)
+        - If you are curious as to how these images were generated, check out the Chapter08/`generate_input.py` file.
+
+Goal in this section: implement a program that can concurrently process these images using thresholding.
+
+To do this, let's look at the example5.py file:
+
+```py
+from multiprocessing import Pool
+import cv2
+
+import sys
+from timeit import default_timer as timer
+
+
+THRESH_METHOD = cv2.ADAPTIVE_THRESH_GAUSSIAN_C
+INPUT_PATH = 'input/large_input/'
+OUTPUT_PATH = 'output/large_output/'
+
+n = 20
+names = ['ship_%i_%i.jpg' % (i, j) for i in range(n) for j in range(n)]
+
+
+def process_threshold(im, output_name, thresh_method):
+    gray_im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    thresh_im = cv2.adaptiveThreshold(gray_im, 255, thresh_method, cv2.THRESH_BINARY, 11, 2)
+
+    cv2.imwrite(OUTPUT_PATH + output_name, thresh_im)
+
+
+if __name__ == '__main__':
+
+    for n_processes in range(1, 7):
+        start = timer()
+
+        with Pool(n_processes) as p:
+            p.starmap(process_threshold, [(
+                cv2.imread(INPUT_PATH + name),
+                name,
+                THRESH_METHOD
+            ) for name in names])
+
+        print('Took %.4f seconds with %i process(es).' % (timer() - start, n_processes))
+
+    print('Done.')
+
+```
+
+What is going on here:
+- `Pool` class from the multiprocessing module to manage our processes.
+    - As a refresher: a Pool object gives convenient options to map a sequence of inputs to separate processes (using the `Pool.map()` method)
+    - We are using the `Pool.starmap()` method to pass multiple arguments to the target function
+- Beginning of program: a number of house-keeping assignments
+    - paths for i/o folders
+    - thresholding method
+    - names of images to process
+
+- `process_threshold()`: actually processes the images
+    - takes in:
+        - image
+        - name of output ie.processed version of image
+        - thresholding method to be used
+    - output: None (it processes the image and saves to disk)
+
+- main: runs the program with 1 processor, 2 processors, ..., 6 processors (to see differences)
+    - each iteration of for-loop:
+        - init `Pool` object
+        - map necessary requirements of each image to `process_threshold()`
+            - you provide args in list of tuples form
+                - [(image, name, method), (image2, name2, method), ... ]
+        - keeping track of elapsed time
+
+Results can be found in `output/large_output/` subfolder.
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example5.py
+
+```
+
+Output:
+
+```bash
+Took 2.8474 seconds with 1 process(es).
+Took 0.4694 seconds with 2 process(es).
+Took 0.4890 seconds with 3 process(es).
+Took 0.4950 seconds with 4 process(es).
+Took 0.6140 seconds with 5 process(es).
+Took 0.6597 seconds with 6 process(es).
+Done.
+```
+
+We can see a big difference in execution time when we go from one single process to two
+separate processes.
+- However, there is negligible or even negative speedup after going from two to higher numbers of processes.
+    - Generally, this is because of the heavy overhead
+        - this is the product of implementing a large number of separate processes (in comparison to a relatively low number of inputs)
+    - with an increased number of inputs we would see better improvements from a high number of working processes
+
+So far, we have seen that concurrent programming could provide a significant speedup for
+image processing applications.
+- However, we can make more adjustments to improve more
+    - In previous example: Sequential vs. Concurrent
+        - Sequential: We are currently reading the images in a sequential way via list comprehension
+        - Concurrent: concurrent input/output processing via `map()` and `partial()`
+
+Navigate to the example6.py file:
+
+```py
+def process_threshold(name, thresh_method):
+    im = cv2.imread(INPUT_PATH + name)
+    gray_im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    thresh_im = cv2.adaptiveThreshold(gray_im, 255, thresh_method, cv2.THRESH_BINARY, 11, 2)
+
+    cv2.imwrite(OUTPUT_PATH + name, thresh_im)
+
+
+if __name__ == '__main__':
+
+    for n_processes in range(1, 7):
+        start = timer()
+
+        with Pool(n_processes) as p:
+            p.map(partial(process_threshold, thresh_method=THRESH_METHOD), names)
+```
+
+What is different here:
+- implemented logic in `process_threshold()` that processes the images and relevant input info
+    - now this function just takes name of input image, handles processing it itself
+- processed all arguments from `names` at once using `map()` and `partial()`
+
+Note: As a side note, we are using Python's built-in functools.partial() method in our main
+program to pass in a partial argument (hence the name), specifically thresh_method, to
+the process_threshold() function, as this argument is fixed across all images and
+processes.
+- More information about this tool can be found at https://docs.python.org/3/
+library/functools.html.
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example6.py
+
+```
+
+Output:
+
+```bash
+Took 2.8474 seconds with 1 process(es).
+Took 0.4694 seconds with 2 process(es).
+Took 0.4890 seconds with 3 process(es).
+Took 0.4950 seconds with 4 process(es).
+Took 0.6140 seconds with 5 process(es).
+Took 0.6597 seconds with 6 process(es).
+Done.
+```
+
+Compared to our last output, this implementation of the application indeed gives us a significantly better execution time!
+
+## Good concurrent image processing practices
+
+Up until this point, you have most likely realized that image processing is quite an
+involved process, and implementing concurrent and parallel programming in an image
+processing application can add more complexity to our work.
+- There are, however, good
+practices that will guide us in the right direction while developing our image processing
+applications. The following section discusses some of the most common practices that we
+should keep in mind.
+
+
+### Choosing the correct way (out of many)
+
+We have hinted at this practice briefly when we learned about thresholding. How an image
+processing application handles and processes its image data heavily depends on the
+problems it is supposed to solve, and what kind of data will be fed to it. Therefore, there is
+significant variability when it comes to choosing specific parameters when processing your
+image.
+
+For example, as we have seen earlier, there are various ways to threshold an image, and
+each will result in very different output: if you want to focus on only the large, distinct
+regions of an image, simple constant thresholding will prove to be more beneficial than
+adaptive thresholding; if, however, you want to highlight small changes in the details of an
+image, adaptive thresholding will be significantly better.
+
+Let's consider another example, in which we will see how tuning a specific parameter for an
+image processing function results in better output. In this example, we are using a simple
+Haar Cascade model to detect faces in images. We will not go too deeply into how the
+model handles and processes its data, since it is already built into OpenCV; again, we are
+only using this model on a high level, changing its parameters to obtain different results.
+
+Navigate to the example7.py file in this chapter's folder. The script is designed to detect
+faces in the obama1.jpeg and obama2.jpg images in our input folder:
+
+```py
+import cv2
+
+face_cascade = cv2.CascadeClassifier('input/haarcascade_frontalface_default.xml')
+
+for filename in ['obama1.jpeg', 'obama2.jpg']:
+    im = cv2.imread('input/' + filename)
+    gray_im = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(im)
+
+    for (x, y, w, h) in faces:
+        cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+    cv2.imshow('%i face(s) found' % len(faces), im)
+    cv2.waitKey(0)
+
+    #cv2.imwrite('output/' + filename, im)
+
+print('Done.')
+
+```
+
+What is going on here:
+- Program loads pretrained Haar Cascade model (`input/haarcascade_frontalface_default.xml`) using the `cv2.CascadeClassifier` class
+- for each image:
+    - script converts image to grayscale
+    - feeds image into pretrained model
+    - script draws green rectange around each face in the image
+    - displays image in a separate window
+
+Run the program, and you will see the following image with the title 5 face(s) found:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example7.py
+
+```
+
+Output (1 correct, 1 incorrect):
+
+![Correct face detection](image-32.png)
+
+It looks like our program is working well so far. Press any key to continue, and you should
+see the following image with the title 7 face(s) found:
+
+![Incorrect face detection](image-33.png)
+
+It looks like our program is mistaking some objects as actual faces, leading to 2 false positives.
+- Reason: How pretrained model was created
+    - Haar Cascade model used a training dataset with images of a specific pixel size
+    - When an input image contains faces of different sizes it will cause false positives
+        - very common in a group picture where some people are closer to the camera + others further away
+    - `scaleFactor` parameter in `detectMultiScale` of `cv2.CascadeClassifier` addresses this issue
+        - this param scales down different areas of the input image before trying to predict whether it has a face or not
+            - doing this negates the potential differences in face sizes
+
+To implement this change: Change line _ in the code:
+
+```py
+# before; 
+faces = face_cascade.detectMultiScale(im)
+# after;
+faces = face_cascade.detectMultiScale(im, scaleFactor=1.2)
+```
+
+Run the program again:
+
+```bash
+cd mastering_concurrency_in_python
+cd Mastering-Concurrency-in-Python
+cd Chapter08
+python example7.py
+
+```
+
+Looks good! No more false positives.
+
+From this example, we can see that it is important to know about the potential challenges
+that the input images will pose to your image processing application in execution, and to
+try different methods or parameters within one method of processing to achieve the best
+results.
+
+## Spawning an appropriate number of processes
+
+Remember: if the number of processes available is too high in comparison to the amount of input,
+the improvement in execution time will diminish (and sometimes even become negative)
+- However, there is no concrete way to tell whether a specific number of separate processes is appropriate for a program unless we also take into account its input images
+    - For example: if input images are large files and it takes a long time to load them from storage, lots of processors can be good (When some processes are waiting on their image to load, other processes can process their images ie. there can be overlap in loading/processing time)
+
+Takeaway: Test out different numbers of processes to find the optimal number for scalability for YOUR use-case
+
+## Processing input/output concurrently
+
+We saw that loading input images in a sequential way might have a negative effect on the
+execution time of an image processing application, as opposed to allowing separate
+processes to load their own inputs.
+- This is specifically true if the image files are significantly large, as the loading time in separate processes might overlap with the loading/processing time in other processes.
+- The same is applicable for writing output images to files.
+
+## Summary
+
+Image processing is the task of analyzing and manipulating digital image files to create new
+versions of the images OR to extract important data from them
+-  These digital images are represented by tables of pixels, which are RGB values (tuples of numbers)
+    - Therefore, digital images are simply multidimensional matrices of numbers, so image processing tasks come down to heavy number-crunching
+
+Since images can be processed independently from each other in an image processing application, concurrent and parallel programming – specifically multiprocessing – provides a way to achieve significant improvements in execution time. 
+
+So far in this book, we have covered the main two forms of concurrent programming:
+- multithreading
+- multiprocessing.
+
+In the next chapter, we will be moving on to the topic of asynchronous I/O
+- one of the key elements of concurrency and parallelism
+
+---
+
+# Chapter 9 - Introduction to Asynchronous Programming
+
+The following topics will be covered in this chapter:
+- The concept of asynchronous programming
+- The key differences between asynchronous programming and other programming models
+
+## Technical requirements
+
+n/a (nothing new)
