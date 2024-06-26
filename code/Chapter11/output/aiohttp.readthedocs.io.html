@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Welcome to AIOHTTP &#8212; aiohttp 3.9.5 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=1cb1a35a" />
+    <link rel="stylesheet" type="text/css" href="_static/aiohttp.css?v=7c8ee731" />
+    
+    <link rel="stylesheet" type="text/css" href="_static/css/logo-adjustments.css?v=f2060474" />
+    <script src="_static/documentation_options.js?v=bd53c558"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Client" href="client.html" />
+ 
+<link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+
+<link rel="canonical" href="http://docs.aiohttp.org/en/stable/index.html"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+<link href="https://fonts.googleapis.com/css?family=Lato|Roboto+Mono" rel="stylesheet">
+
+  
+<!-- RTD Extra Head -->
+
+
+
+<script type="application/json" id="READTHEDOCS_DATA">{"ad_free": false, "api_host": "https://readthedocs.org", "builder": "sphinx", "canonical_url": null, "docroot": "/docs/", "features": {"docsearch_disabled": false}, "global_analytics_code": "UA-17997319-1", "language": "en", "page": "index", "programming_language": "py", "project": "aiohttp", "proxied_api_host": "/_", "source_suffix": ".rst", "subprojects": {}, "theme": "aiohttp_theme", "user_analytics_code": "UA-108525135-1", "version": "stable"}</script>
+
+<!--
+Using this variable directly instead of using `JSON.parse` is deprecated.
+The READTHEDOCS_DATA global variable will be removed in the future.
+-->
+<script type="text/javascript">
+READTHEDOCS_DATA = JSON.parse(document.getElementById('READTHEDOCS_DATA').innerHTML);
+</script>
+
+
+
+<!-- end RTD <extrahead> -->
+<script async type="text/javascript" src="/_/static/javascript/readthedocs-addons.js"></script><meta name="readthedocs-project-slug" content="aiohttp" /><meta name="readthedocs-version-slug" content="stable" /><meta name="readthedocs-resolver-filename" content="/" /></head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="welcome-to-aiohttp">
+<h1>Welcome to AIOHTTP<a class="headerlink" href="#welcome-to-aiohttp" title="Link to this heading">¶</a></h1>
+<p>Asynchronous HTTP Client/Server for <a class="reference internal" href="glossary.html#term-asyncio"><span class="xref std std-term">asyncio</span></a> and Python.</p>
+<p>Current version is 3.9.5.</p>
+<section id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Supports both <a class="reference internal" href="client.html#aiohttp-client"><span class="std std-ref">Client</span></a> and <a class="reference internal" href="web.html#aiohttp-web"><span class="std std-ref">HTTP Server</span></a>.</p></li>
+<li><p>Supports both <a class="reference internal" href="web_quickstart.html#aiohttp-web-websockets"><span class="std std-ref">Server WebSockets</span></a> and
+<a class="reference internal" href="client_quickstart.html#aiohttp-client-websockets"><span class="std std-ref">Client WebSockets</span></a> out-of-the-box
+without the Callback Hell.</p></li>
+<li><p>Web-server has <a class="reference internal" href="web_advanced.html#aiohttp-web-middlewares"><span class="std std-ref">Middlewares</span></a>,
+<a class="reference internal" href="web_advanced.html#aiohttp-web-signals"><span class="std std-ref">Signals</span></a> and pluggable routing.</p></li>
+</ul>
+</section>
+<section id="library-installation">
+<span id="aiohttp-installation"></span><h2>Library Installation<a class="headerlink" href="#library-installation" title="Link to this heading">¶</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>aiohttp
+</pre></div>
+</div>
+<p>For speeding up DNS resolving by client API you may install
+<a class="reference internal" href="glossary.html#term-aiodns"><span class="xref std std-term">aiodns</span></a> as well.
+This option is highly recommended:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>aiodns
+</pre></div>
+</div>
+<section id="installing-all-speedups-in-one-command">
+<h3>Installing all speedups in one command<a class="headerlink" href="#installing-all-speedups-in-one-command" title="Link to this heading">¶</a></h3>
+<p>The following will get you <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> along with <a class="reference internal" href="glossary.html#term-aiodns"><span class="xref std std-term">aiodns</span></a> and <code class="docutils literal notranslate"><span class="pre">Brotli</span></code> in one
+bundle.
+No need to type separate commands anymore!</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>aiohttp<span class="o">[</span>speedups<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">¶</a></h2>
+<section id="client-example">
+<h3>Client example<a class="headerlink" href="#client-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;http://python.org&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Status:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Content-type:&quot;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">])</span>
+
+            <span class="n">html</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Body:&quot;</span><span class="p">,</span> <span class="n">html</span><span class="p">[:</span><span class="mi">15</span><span class="p">],</span> <span class="s2">&quot;...&quot;</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This prints:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Status: 200
+Content-type: text/html; charset=utf-8
+Body: &lt;!doctype html&gt; ...
+</pre></div>
+</div>
+<p>Coming from <a class="reference internal" href="glossary.html#term-requests"><span class="xref std std-term">requests</span></a> ? Read <a class="reference internal" href="http_request_lifecycle.html#aiohttp-request-lifecycle"><span class="std std-ref">why we need so many lines</span></a>.</p>
+</section>
+<section id="server-example">
+<h3>Server example:<a class="headerlink" href="#server-example" title="Link to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">aiohttp</span> <span class="kn">import</span> <span class="n">web</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">match_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s2">&quot;Anonymous&quot;</span><span class="p">)</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Hello, &quot;</span> <span class="o">+</span> <span class="n">name</span>
+    <span class="k">return</span> <span class="n">web</span><span class="o">.</span><span class="n">Response</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">()</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_routes</span><span class="p">([</span><span class="n">web</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="p">),</span>
+                <span class="n">web</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;/</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">handle</span><span class="p">)])</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">web</span><span class="o">.</span><span class="n">run_app</span><span class="p">(</span><span class="n">app</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information please visit <a class="reference internal" href="client.html#aiohttp-client"><span class="std std-ref">Client</span></a> and
+<a class="reference internal" href="web.html#aiohttp-web"><span class="std std-ref">Server</span></a> pages.</p>
+</section>
+</section>
+<section id="development-mode">
+<h2>Development mode<a class="headerlink" href="#development-mode" title="Link to this heading">¶</a></h2>
+<p>When writing your code, we recommend enabling Python’s
+<a class="reference external" href="https://docs.python.org/3/library/devmode.html">development mode</a>
+(<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-X</span> <span class="pre">dev</span></code>). In addition to the extra features enabled for asyncio, aiohttp
+will:</p>
+<ul class="simple">
+<li><p>Use a strict parser in the client code (which can help detect malformed responses
+from a server).</p></li>
+<li><p>Enable some additional checks (resulting in warnings in certain situations).</p></li>
+</ul>
+</section>
+<section id="what-s-new-in-aiohttp-3">
+<h2>What’s new in aiohttp 3?<a class="headerlink" href="#what-s-new-in-aiohttp-3" title="Link to this heading">¶</a></h2>
+<p>Go to <a class="reference internal" href="whats_new_3_0.html#aiohttp-whats-new-3-0"><span class="std std-ref">What’s new in aiohttp 3.0</span></a> page for aiohttp 3.0 major release
+changes.</p>
+</section>
+<section id="tutorial">
+<h2>Tutorial<a class="headerlink" href="#tutorial" title="Link to this heading">¶</a></h2>
+<p><a class="reference external" href="https://aiohttp-demos.readthedocs.io/en/latest/index.html#aiohttp-demos-polls-beginning" title="(in aiohttp-demos v0.2)"><span class="xref std std-ref">Polls tutorial</span></a></p>
+</section>
+<section id="source-code">
+<h2>Source code<a class="headerlink" href="#source-code" title="Link to this heading">¶</a></h2>
+<p>The project is hosted on <a class="reference external" href="https://github.com/aio-libs/aiohttp">GitHub</a></p>
+<p>Please feel free to file an issue on the <a class="reference external" href="https://github.com/aio-libs/aiohttp/issues">bug tracker</a> if you have found a bug
+or have some suggestion in order to improve the library.</p>
+</section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
+<ul>
+<li><p><em>async_timeout</em></p></li>
+<li><p><em>attrs</em></p></li>
+<li><p><em>multidict</em></p></li>
+<li><p><em>yarl</em></p></li>
+<li><p><em>Optional</em> <a class="reference internal" href="glossary.html#term-aiodns"><span class="xref std std-term">aiodns</span></a> for fast DNS resolving. The
+library is highly recommended.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>aiodns
+</pre></div>
+</div>
+</li>
+<li><p><em>Optional</em> <a class="reference internal" href="glossary.html#term-Brotli"><span class="xref std std-term">Brotli</span></a> or <a class="reference internal" href="glossary.html#term-brotlicffi"><span class="xref std std-term">brotlicffi</span></a> for brotli (<span class="target" id="index-0"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc7932.html"><strong>RFC 7932</strong></a>)
+client compression support.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>Brotli
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="communication-channels">
+<h2>Communication channels<a class="headerlink" href="#communication-channels" title="Link to this heading">¶</a></h2>
+<p><em>aio-libs Discussions</em>: <a class="reference external" href="https://github.com/aio-libs/aiohttp/discussions">https://github.com/aio-libs/aiohttp/discussions</a></p>
+<p>Feel free to post your questions and ideas here.</p>
+<p><em>gitter chat</em> <a class="reference external" href="https://gitter.im/aio-libs/Lobby">https://gitter.im/aio-libs/Lobby</a></p>
+<p>We support <a class="reference external" href="https://stackoverflow.com/questions/tagged/aiohttp">Stack Overflow</a>.
+Please add <em>aiohttp</em> tag to your question there.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading">¶</a></h2>
+<p>Please read the <a class="reference internal" href="contributing.html#aiohttp-contributing"><span class="std std-ref">instructions for contributors</span></a>
+before making a Pull Request.</p>
+</section>
+<section id="authors-and-license">
+<h2>Authors and License<a class="headerlink" href="#authors-and-license" title="Link to this heading">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">aiohttp</span></code> package is written mostly by Nikolay Kim and Andrew Svetlov.</p>
+<p>It’s <em>Apache 2</em> licensed and freely available.</p>
+<p>Feel free to improve this package and send a pull request to <a class="reference external" href="https://github.com/aio-libs/aiohttp">GitHub</a>.</p>
+</section>
+<section id="policy-for-backward-incompatible-changes">
+<span id="aiohttp-backward-compatibility-policy"></span><h2>Policy for Backward Incompatible Changes<a class="headerlink" href="#policy-for-backward-incompatible-changes" title="Link to this heading">¶</a></h2>
+<p><em>aiohttp</em> keeps backward compatibility.</p>
+<p>After deprecating some <em>Public API</em> (method, class, function argument,
+etc.) the library guaranties the usage of <em>deprecated API</em> is still
+allowed at least for a year and half after publishing new release with
+deprecation.</p>
+<p>All deprecations are reflected in documentation and raises
+<a class="reference external" href="https://docs.python.org/3/library/exceptions.html#DeprecationWarning" title="(in Python v3.12)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a>.</p>
+<p>Sometimes we are forced to break the own rule for sake of very strong
+reason.  Most likely the reason is a critical bug which cannot be
+solved without major API change, but we are working hard for keeping
+these changes as rare as possible.</p>
+</section>
+<section id="table-of-contents">
+<h2>Table Of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="mastertoc">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="client_quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_advanced.html">Advanced Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="client_reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tracing_reference.html">Tracing Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="http_request_lifecycle.html">The aiohttp Request Lifecycle</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Server</a><ul>
+<li class="toctree-l2"><a class="reference external" href="https://demos.aiohttp.org">Tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_quickstart.html">Quickstart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_advanced.html">Advanced Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_lowlevel.html">Low Level</a></li>
+<li class="toctree-l2"><a class="reference internal" href="web_reference.html">Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="logging.html">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html">Testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="deployment.html">Deployment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="abc.html">Abstract Base Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multipart.html">Working with Multipart</a></li>
+<li class="toctree-l2"><a class="reference internal" href="multipart_reference.html">Multipart reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="streams.html">Streaming API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structures.html">Common data structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="websocket_utilities.html">WebSocket utilities</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#are-there-plans-for-an-app-route-decorator-like-in-flask">Are there plans for an &#64;app.route decorator like in Flask?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#does-aiohttp-have-a-concept-like-flask-s-blueprint-or-django-s-app">Does aiohttp have a concept like Flask’s “blueprint” or Django’s “app”?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-create-a-route-that-matches-urls-with-a-given-prefix">How do I create a route that matches urls with a given prefix?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#where-do-i-put-my-database-connection-so-handlers-can-access-it">Where do I put my database connection so handlers can access it?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-can-middleware-store-data-for-web-handlers-to-use">How can middleware store data for web handlers to use?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#can-a-handler-receive-incoming-events-from-different-sources-in-parallel">Can a handler receive incoming events from different sources in parallel?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-programmatically-close-a-websocket-server-side">How do I programmatically close a WebSocket server-side?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-make-a-request-from-a-specific-ip-address">How do I make a request from a specific IP address?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#what-is-the-api-stability-and-deprecation-policy">What is the API stability and deprecation policy?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-enable-gzip-compression-globally-for-my-entire-application">How do I enable gzip compression globally for my entire application?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-manage-a-clientsession-within-a-web-server">How do I manage a ClientSession within a web server?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-access-database-connections-from-a-subapplication">How do I access database connections from a subapplication?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-perform-operations-in-a-request-handler-after-sending-the-response">How do I perform operations in a request handler after sending the response?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#how-do-i-make-sure-my-custom-middleware-response-will-behave-correctly">How do I make sure my custom middleware response will behave correctly?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="faq.html#why-is-creating-a-clientsession-outside-of-an-event-loop-dangerous">Why is creating a ClientSession outside of an event loop dangerous?</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">Miscellaneous</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="essays.html">Essays</a></li>
+<li class="toctree-l2"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changes.html">Changelog</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html#indices-and-tables">Indices and tables</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="external.html">Who uses aiohttp?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="third_party.html">Third-Party libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="built_with.html">Built with aiohttp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="powered_by.html">Powered by aiohttp</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#instructions-for-contributors">Instructions for contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#preconditions-for-running-aiohttp-test-suite">Preconditions for running aiohttp test suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#llhttp">LLHTTP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#run-autoformatter">Run autoformatter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#run-aiohttp-test-suite">Run aiohttp test suite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#code-coverage">Code coverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#other-tools">Other tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#spell-checking">Spell checking</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#preparing-a-pull-request">Preparing a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#changelog-update">Changelog update</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#making-a-pull-request">Making a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#backporting">Backporting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#how-to-become-an-aiohttp-committer">How to become an aiohttp committer</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/aiohttp-plain.svg" alt="Logo"/>
+            </a></p>
+<h1 class="logo"><a href="#">aiohttp</a></h1>
+
+
+
+<p class="blurb">Async HTTP client/server for asyncio and Python</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=aio-libs&repo=aiohttp&type=star&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+
+
+
+<ul class="badges">
+  
+  <li><a href="https://github.com/aio-libs/aiohttp/actions?query=workflow%3ACI">
+    <img src="https://github.com/aio-libs/aiohttp/workflows/CI/badge.svg"
+	 alt="Azure Pipelines CI status"
+	 height="20"
+    />
+  </a>
+  
+  <li><a href="https://codecov.io/github/aio-libs/aiohttp">
+    <img src="https://codecov.io/github/aio-libs/aiohttp/coverage.svg?branch=master"
+	 alt="Code coverage status"
+	 height="20"
+    />
+  </a>
+  
+  <li><a href="https://badge.fury.io/py/aiohttp">
+    <img src="https://badge.fury.io/py/aiohttp.svg"
+	 alt="Latest PyPI package version"
+	 height="20"
+    />
+  </a>
+  
+  <li><a href="https://gitter.im/aio-libs/Lobby">
+    <img src="https://badges.gitter.im/Join%20Chat.svg"
+	 alt="Chat on Gitter"
+	 height="20"
+    />
+  </a>
+  
+</ul>
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="client.html">Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="web.html">Server</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">Utilities</a></li>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="misc.html">Miscellaneous</a></li>
+<li class="toctree-l1"><a class="reference internal" href="external.html">Who uses aiohttp?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+</ul>
+
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;aiohttp contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/aio-libs/aiohttp" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

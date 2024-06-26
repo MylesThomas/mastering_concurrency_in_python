@@ -18,6 +18,7 @@ Topics:
 Steps:
 1. Download Python 3
 2. Download the github repo from https://github.com/PacktPublishing/Mastering-Concurrency-in-Python/
+- Copy the folder, delete the .git file, and rename the folder `code`
 
 ## What is concurrency?
 
@@ -550,7 +551,7 @@ Let's run the program:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter02/example1.py
+python code/Chapter02/example1.py
 ```
 
 Here is my output:
@@ -799,7 +800,7 @@ This function is more of a class to be imported into other function, but you can
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/my_thread.py
+python code/Chapter03/my_thread.py
 ```
 
 Next, let's look at the Chapter3/example1.py file:
@@ -831,13 +832,13 @@ Let's run the program:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/example1.py
+python code/Chapter03/example1.py
 ```
 
 Our output looks something like this:
 
 ```bash
-C:\Users\Myles\mastering_concurrency_in_python>python Mastering-Concurrency-in-Python/Chapter03/example1.py
+C:\Users\Myles\mastering_concurrency_in_python>python code/Chapter03/example1.py
 Starting thread A.
 Starting thread B.
 Thread A counting down: 5...
@@ -975,7 +976,7 @@ Run the program:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/example2.py
+python code/Chapter03/example2.py
 
 ```
 
@@ -1081,7 +1082,7 @@ Run the program:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/example3.py
+python code/Chapter03/example3.py
 
 ```
 
@@ -1195,7 +1196,7 @@ Let's run it and look at the output:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/example4.py
+python code/Chapter03/example4.py
 
 ```
 
@@ -1375,7 +1376,7 @@ Let's run the code to see what happens:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter03/example5.py
+python code/Chapter03/example5.py
 
 ```
 
@@ -1488,7 +1489,7 @@ Run the program:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter04
 python example1.py
 
@@ -1499,9 +1500,9 @@ It runs, and there are no prints or anything. OK...
 Now, try running it with `n_files` = 10000! This is similar to what you should see:
 
 ```bash
-C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter04>python example1.py
+C:\Users\Myles\mastering_concurrency_in_python\code\Chapter04>python example1.py
 Traceback (most recent call last):
-  File "C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter04\example1.py", line 
+  File "C:\Users\Myles\mastering_concurrency_in_python\code\Chapter04\example1.py", line 
 8, in <module>
 OSError: [Errno 24] Too many open files: 'output1/sample8189.txt'
 ```
@@ -1632,7 +1633,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter04
 python example2.py
 
@@ -1851,7 +1852,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter05
 python example1.py
 ```
@@ -1937,7 +1938,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter05
 python example2.py
 ```
@@ -2014,7 +2015,7 @@ print(f'Threading: {time.time() - start : .2f} seconds')
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter05
 python example3.py
 
@@ -2162,7 +2163,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter05
 python example5.py
 
@@ -2281,7 +2282,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter05
 python example6.py
 
@@ -2567,7 +2568,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example1.py
+python code/Chapter06/example1.py
 
 ```
 
@@ -2710,7 +2711,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example2.py
+python code/Chapter06/example2.py
 
 ```
 
@@ -2780,7 +2781,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example3.py
+python code/Chapter06/example3.py
 
 ```
 
@@ -2876,7 +2877,7 @@ Let's look at our output:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example4.py
+python code/Chapter06/example4.py
 
 ```
 
@@ -2918,7 +2919,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example5.py
+python code/Chapter06/example5.py
 
 ```
 
@@ -3046,7 +3047,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example6.py
+python code/Chapter06/example6.py
 
 ```
 
@@ -3184,7 +3185,7 @@ Let's run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example7.py
+python code/Chapter06/example7.py
 
 ```
 
@@ -3285,7 +3286,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter06/example8.py
+python code/Chapter06/example8.py
 ```
 
 Output:
@@ -3541,14 +3542,14 @@ Let's run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-python Mastering-Concurrency-in-Python/Chapter07/example1.py
+python code/Chapter07/example1.py
 
 ```
 
 Output:
 
 ```bash
-C:\Users\Myles\mastering_concurrency_in_python>python Mastering-Concurrency-in-Python/Chapter07/example1.py
+C:\Users\Myles\mastering_concurrency_in_python>python code/Chapter07/example1.py
 Using process ReductionConsumer-4...
 Running process ReductionConsumer-4 on numbers 0 and 1.
 Running process ReductionConsumer-4 on numbers 2 and 3.
@@ -3820,7 +3821,7 @@ Run the program (File paths are relative, so you must cd into the correct folder
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example1.py
 
@@ -3833,7 +3834,7 @@ Output:
 After pressing a key to make the ship disappear, you should see this print to your console/terminal:
 
 ```bash
-C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter08>python example1.py
+C:\Users\Myles\mastering_concurrency_in_python\code\Chapter08>python example1.py
 [[[199 136  86]
   [199 136  86]
   [199 136  86]
@@ -3935,7 +3936,7 @@ Let's run the code and check:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example2.py
 
@@ -3944,7 +3945,7 @@ python example2.py
 It worked! Here is the text output in the console (after pressing any key to unblock the program):
 
 ```bash
-C:\Users\Myles\mastering_concurrency_in_python\Mastering-Concurrency-in-Python\Chapter08>python example2.py
+C:\Users\Myles\mastering_concurrency_in_python\code\Chapter08>python example2.py
 [[128 128 128 ... 129 128 132]
  [125 125 125 ... 129 128 130]
  [124 125 125 ... 129 129 130]
@@ -4022,7 +4023,7 @@ Let's run the code and double check that it works:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example3.py
 
@@ -4077,7 +4078,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example4.py
 
@@ -4185,7 +4186,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example5.py
 
@@ -4253,7 +4254,7 @@ Run the code:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example6.py
 
@@ -4341,7 +4342,7 @@ Run the program, and you will see the following image with the title 5 face(s) f
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example7.py
 
@@ -4378,7 +4379,7 @@ Run the program again:
 
 ```bash
 cd mastering_concurrency_in_python
-cd Mastering-Concurrency-in-Python
+cd code
 cd Chapter08
 python example7.py
 
@@ -4435,3 +4436,1719 @@ The following topics will be covered in this chapter:
 ## Technical requirements
 
 n/a (nothing new)
+
+## A quick analogy
+
+Asynchronous programming: programming that focuses on coordinating tasks in an application
+- goal: make sure the application finishes executing tasks in the smallest amount of time possible
+- how it does this: create overlapping between waiting time + processing time (by switching from 1 task to another)
+    - this will shorten the total time to finish the whole program
+
+To understand the underlying idea of asynchronous programming, let's consider a quick,
+real-life analogy. Imagine a scenario in which you are cooking a three-course meal that
+contains the following:
+- An appetizer that will take 2 minutes of preparation and 3 minutes of
+cooking/waiting
+- A main course that will take 5 minutes of preparation and 10 minutes of
+cooking/waiting
+- A dessert that will take 3 minutes of preparation and 5 minutes of
+cooking/waiting
+
+Now, considering the order in which the courses finish cooking, your goal is to determine a
+way to produce the three courses that will take the least amount of time.
+
+Example #1: cooking the courses in a sequential way (28 minutes)
+- finish the appetizer (5 min)
+- main course (15 min)
+- dessert (8 min)
+
+Example #2: 
+- prepare main course (5 min)
+- prepare the appetizer (2 min)
+    - main course has 8 min left to finish cooking
+- prepare the dessert (3 min)
+    - appetizer is now finished cooking
+    - main course has 5 minutes left
+- wait for main course/dessert to finish cooking (5 min)
+
+All done!
+
+Finding the best order to execute and switch between tasks in a program is the main idea
+behind asynchronous programming. (instead of executing all of the instructions of that
+program in a sequential way, we coordinate those instructions so that we can create
+overlapped waiting and processing times and finally achieve a better execution time)
+
+## Asynchronous versus other programming models
+
+Async: one of the major concepts in concurrency
+- complex concept
+- can be challenging to differentiate from other programming models (ie. threading/multiprocessing)
+
+### Asynchronous versus synchronous programming
+
+Common example of synchronous programming: interaction between server + client in an HTTP request
+- if it were synchronous: client would have to wait until getting a response from the server
+    - your browser would hang everytime you click a link/or start playing a video
+- with async: client is free to continue working
+    - when data requests return from the server, client is notified, and then processes the data
+
+AJAX: Async JavaScript + XML
+- async is so common in web development that AJAX is used in almost every website
+
+Callback: a function that can be passed to another function to execute later in the future
+- common with jQuery and Node.js
+
+Switching back and forth between the execution of functions is the main idea of asynchronous programming.
+
+The following diagram further illustrates the difference between synchronous and
+asynchronous client-server communication:
+
+![Differences between synchronous and asynchronous HTTP requests](image-34.png)
+
+Async tasks:
+- general network communication
+- software data processing
+- interaction with databases
+
+Contrary to synchronous programming, asynchronous programming provides responsiveness for users by
+preventing the program from hanging while waiting for data.
+- makes it great for programs that deal with a large amount of data.
+
+## Asynchronous versus threading and multiprocessing
+
+While providing somewhat similar benefits to those that threading and multiprocessing
+provide, asynchronous programming is fundamentally different from these two
+programming models, especially in the Python programming language.
+
+Asynchronous vs. threading vs. multiprocessing
+- multiprocessing: 1 thread, multiple processes
+    - multiple copies of the same program executed on different cores
+    - example: 4 processes, each taking up 1 thread
+- threading: multiple threads
+    - code not separate in separate cores, but parts of code execute in separate threads (they don't interact with each other)
+    - example: 1 process, 4 threads split up the work
+- Asynchronous: keeps all instructions in the same 1 thread + 1 process
+    - 1 executor switches from 1 task to another (if it is more efficient)
+    - does NOT take advantage of multiple cores
+
+### An example in Python
+
+While we will go into more depth regarding how asynchronous programming can be implemented in Python and the main tools we will be using, including the asyncio module, let's consider how asynchronous programming can improve the execution time of our Python programs.
+
+Let's take a look at the Chapter09/example1.py file:
+
+```py
+# ch9/example1.py
+
+from math import sqrt
+
+def is_prime(x):
+    print('Processing %i...' % x)
+
+    if x < 2:
+        print('%i is not a prime number.' % x)
+
+    elif x == 2:
+        print('%i is a prime number.' % x)
+
+    elif x % 2 == 0:
+        print('%i is not a prime number.' % x)
+
+    else:
+        limit = int(sqrt(x)) + 1
+        for i in range(3, limit, 2):
+            if x % i == 0:
+                print('%i is not a prime number.' % x)
+                return
+
+        print('%i is a prime number.' % x)
+
+if __name__ == '__main__':
+
+    is_prime(9637529763296797)
+    is_prime(427920331)
+    is_prime(157)
+
+```
+
+What is going on here:
+- is_prime(): prints if the integer is prime or not
+- we call this on 3 different numbers
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter09/example1.py
+
+```
+
+Output:
+
+```bash
+Processing 9637529763296797...
+9637529763296797 is a prime number.
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+```
+
+Note; This took about 4 seconds to process the first number (because of how large it is)
+
+You have probably noticed that the program took quite some time to process the first input.
+Because of the way the is_prime() function is implemented, if the input of the prime
+number is large, then it takes is_prime() longer to process it. So, since we have a large
+prime number as the first input, our Python program will hang for a significant amount of
+time before printing out the output. This typically creates a non-responsive feel for our
+program, which is not desirable in both software engineering and web development.
+
+To improve the responsiveness of the program, we will take advantage of the asyncio
+module, which has been implemented in the Chapter09/example2.py file:
+
+```py
+# ch9/example1.py
+
+from math import sqrt
+import asyncio
+
+async def is_prime(x):
+    print('Processing %i...' % x)
+
+    if x < 2:
+        print('%i is not a prime number.' % x)
+
+    elif x == 2:
+        print('%i is a prime number.' % x)
+
+    elif x % 2 == 0:
+        print('%i is not a prime number.' % x)
+
+    else:
+        limit = int(sqrt(x)) + 1
+        for i in range(3, limit, 2):
+            if x % i == 0:
+                print('%i is not a prime number.' % x)
+                return
+            elif i % 100000 == 1:
+                await asyncio.sleep(0)
+
+        print('%i is a prime number.' % x)
+
+async def main():
+
+    task1 = loop.create_task(is_prime(9637529763296797))
+    task2 = loop.create_task(is_prime(427920331))
+    task3 = loop.create_task(is_prime(157))
+
+    await asyncio.wait([task1, task2, task3])
+
+if __name__ == '__main__':
+    try:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
+    except Exception as e:
+        print('There was a problem:')
+        print(str(e))
+    finally:
+        loop.close()
+
+```
+
+We will go into the details of this code in the next chapter. For now, simply run the script,
+and you will see an improvement in responsiveness in the printed output:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter09/example2.py
+
+```
+
+Output:
+
+```bash
+Processing 9637529763296797...
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+9637529763296797 is a prime number.
+```
+
+See how the order is different! (The blocking number ran in the background, while the others executed)
+- Note: We will go into the details of this code in the next chapter
+
+Specifically, while 9637529763296797 (our largest input) was being processed, the
+program decided to switch to the next inputs. Therefore, the results for 427920331 and 157
+were returned before it, hence improving the responsiveness of the program.
+
+## Summary
+
+Asynchronous programming is a programming model that is based on task coordination
+through task switching. It is different from traditional sequential (or synchronous)
+programming since it creates an overlap between processing and waiting time, which
+provides potential improvements in speed. Asynchronous programming is also different
+from threading and multiprocessing, as it only takes place within one single thread in one
+single process.
+
+Asynchronous programming is mostly used to improve the responsiveness of a program.
+When a large input takes a significant amount of time to process, the sequential version of a
+program will appear to be hanging, while the asynchronous program will move to other
+less heavy tasks. This allows small inputs to finish executing first and help the program to
+be more responsive.
+
+In the next chapter, we will learn about the main structure of an asynchronous program
+and look into the asyncio module and its functionalities in more detail.
+
+---
+
+# Chapter 10 - Implementing Asynchronous Programming in Python
+
+This chapter will introduce you to the asyncio module in Python. It will cover the idea
+behind this new concurrency module, which utilizes event loops and coroutines and
+provides an API that is as readable as synchronous code. In this chapter, we will also
+discuss the implementation of asynchronous programming, in addition to threading and
+multiprocessing through the concurrent.futures module. During this process, we will
+cover the application of asynchronous programming via the most common uses of
+asyncio, including asynchronous input/output and avoiding blocking tasks.
+
+The following topics will be covered in this chapter:
+- The fundamental elements of implementing asynchronous programming using
+asyncio
+- The framework for asynchronous programming provided by asyncio
+- The concurrent.futures module and its usage, in respect to asyncio
+
+## The asyncio module
+As you saw in the previous chapter, the asyncio module provides an easy way to convert
+a sequential program to an asynchronous one. In this section, we will be discussing the
+general structure of an asynchronous program, and subsequently, how to implement the
+conversion from a sequential to an asynchronous program in Python.
+
+### Coroutines, event loops, and futures
+
+There are a few common elements that most asynchronous programs have.
+
+Coroutines, event loops, and futures are three of those elements. They are defined as follows:
+- Event loops: main coordinators of tasks in an asynchronous program
+    - keeps track of all of the tasks that are to be run asynchronously
+    - decides which of those tasks should be executed at a given moment.
+        - In other words, handles the task switching aspect (or the execution flow)
+
+- Coroutines: a special type of function that wrap around specific tasks (so that they can be executed asynchronously)
+    - required in order to specify where in the function the task switching should take place
+        - in other words, they specify when the function should give back the flow of execution to the event loop
+    - tasks for coroutines are typically either stored in a task queue or created inside the event loop
+- Futures: placeholders for the results returned from coroutines.
+    - These future objects are created as soon as coroutines are initiated in the event loop
+    - can represent the following:
+        - actual results
+        - pending results (if the coroutines have not finished executing)
+        - or even an exception (if that is what the coroutine will return).
+
+An event loop, coroutines, and their corresponding futures, are the core elements of an asynchronous programming process.
+- First, the event loop is started and interacts with its task queue, in order to obtain the first task.
+- The coroutine for this task and its corresponding future are then created
+- When a task switching has to take place inside of that coroutine, the coroutine suspends, and the next coroutine is called (all data and the context from the first coroutine are saved)
+    - if that coroutine is blocking (for example, input/output processing or sleeping), the flow of execution is released back to the event loop, which will move on to the next item in the task queue
+    - The event loop will initiate the last item in the task queue before it switches back to the first coroutine, and will proceed the execution from where it was last suspended.
+
+As each task finishes executing, the following occurs:
+- it will be dequeued from the task queue
+- its coroutine will be terminated
+- the corresponding future will register the returned result from the coroutine.
+
+This process will go on until all tasks in the task queue are completely executed.
+
+The following diagram further illustrates the general structure of the asynchronous process described earlier:
+
+![Asynchronous programming process](image-35.png)
+
+## Asyncio API
+
+First foundation: `async` and `await`
+- async: usually put in front of `def` when a function is declared
+    - causes Python to interpret the function as a coroutine
+- await: used to specify where/when to give back flow of execution to the event loop
+    - as discussed above: each coroutine needs this specification for when the task switching events will take place
+    - typically: done by waiting for another coroutine to produce a result
+        - examples:
+            - await coroutine
+            - asyncio.sleep()
+            - asyncio.wait()
+
+Note: async and await keywords are actually provided by Python (are not managed by the asyncio module)
+- asynchronous programming can actually be implemented without asyncio, but
+    - as you will see, asyncio provides a framework to make this easier
+
+Most commonly used API from `asyncio`: event-loop-managing functionalities (with asyncio, you can manipulate your tasks and event loops with easy function calls):
+- `asyncio.get_event_loop()`: returns the event loop for the current context, which is an `AbstractEventLoop` object
+    - Most of the time, we do not need to worry about this class (the asyncio module already provides a high-level API to manage our event loops)
+
+- `AbstractEventLoop.create_task()`: adds its input to the current task queue of the calling event loop
+    - to be called by an event loop
+    - the input is typically a coroutine (that is, a function with the async keyword).
+
+- `AbstractEventLoop.run_until_complete()`: takes in the main coroutine of an asynchronous program and executes it until the corresponding future of the coroutine is returned
+    - to be called by an event loop
+    - While the method initiates the event loop execution, it also blocks all subsequent code following it (until all futures are complete)
+
+- `AbstractEventLoop.run_forever()`: somewhat similar to `AbstractEventLoop.run_until_complete()`
+    - as the name suggests: the calling event loop will run forever, unless the `AbstractEventLoop.stop()` method is called
+        - instead of exiting, the loop will continue to run (even upon obtaining the returned futures)
+
+- `AbstractEventLoop.stop()`: causes the calling event loop to stop executing and exit at the nearest appropriate opportunity (without causing the whole program to crash)
+
+Aside from these methods, we use non-blocking functions to switch events. These include:
+- `asyncio.sleep()`: creates an additional coroutine that completes after a given time (specified by the input, in seconds)
+    - function is a coroutine
+    - typically: used as asyncio.sleep(0)
+        - to cause an immediate task switching event
+
+- `asyncio.wait()`: can be used to switch tasks
+    - function is also a coroutine
+    - takes in a sequence (usually a list) of futures, waits for them to finish
+
+## The asyncio framework in action
+
+let's consider the process of applying the framework provided to a
+synchronous application in Python, and convert it to an asynchronous one.
+
+### Asynchronously counting down
+
+Let's take a look at the Chapter10/example1.py file, as follows:
+
+```py
+# ch10/example1.py
+
+import time
+
+def count_down(name, delay):
+    indents = (ord(name) - ord('A')) * '\t'
+
+    n = 3
+    while n:
+        time.sleep(delay)
+
+        duration = time.perf_counter() - start
+        print('-' * 40)
+        print('%.4f \t%s%s = %i' % (duration, indents, name, n))
+
+        n -= 1
+
+start = time.perf_counter()
+
+count_down('A', 1)
+count_down('B', 0.8)
+count_down('C', 0.5)
+
+print('-' * 40)
+print('Done.')
+
+```
+
+What is going on here:
+- We are counting down from 3 and printing out time elapsed
+    - time.sleep is used to delay
+        - A: 1
+        - B: 0.8
+        - C: 0.5
+- Goal: illustrate the asynchronous nature of overlapping the processing and waiting time of independent tasks
+
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example1.py
+
+```
+
+Output:
+
+```bash
+----------------------------------------
+1.0011  A = 3
+----------------------------------------
+2.0040  A = 2
+----------------------------------------
+3.0058  A = 1
+----------------------------------------
+3.8068          B = 3
+----------------------------------------
+4.6087          B = 2
+----------------------------------------
+5.4097          B = 1
+----------------------------------------
+5.9113                  C = 3
+----------------------------------------
+6.4138                  C = 2
+----------------------------------------
+6.9151                  C = 1
+----------------------------------------
+Done.
+```
+
+Summary: program counted down for letter A
+first, with one-second intervals, and it moved on to letter B, with 0.8-second intervals, and
+finally, to letter C, with 0.5-second intervals.
+- This is a purely sequential, synchronous
+program, since there is no overlapping between processing and waiting time
+
+Keeping the idea behind asynchronous programming in mind, we can see that it is actually
+possible for us to convert this program to an asynchronous one.
+- Specifically, let's suppose that during the first second of the program, while we are waiting to count down the letter A, we can switch tasks to move to other letters
+    - we will implement this setup for all of the letters inside the `count_down()` function (in other words, we will turn `count_down()` into a coroutine)
+
+But first, let's make our program asynchronous.
+
+To do this:
+1. make `count_down()` into a coroutine
+- add the keyword async in front of the function
+2. specify a point inside the function to be a task switching event
+- instead of the time.sleep() function, we will be using the asyncio.sleep() function along with the await keyword
+    - `await asyncio.sleep()` will pause the coroutine and allow other tasks to execute (allows other tasks in the event loop to run during that wait period)
+
+Note: the rest of the `count_down()` function/coroutine should remain the same:
+
+```py
+# ch10/example2.py
+async def count_down(name, delay):
+    indents = (ord(name) - ord('A')) * '\t'
+
+    n = 3
+    while n:
+        await asyncio.sleep(delay)
+
+        duration = time.perf_counter() - start
+        print('-' * 40)
+        print('%.4f \t%s%s = %i' % (duration, indents, name, n))
+
+        n -= 1
+```
+
+As for our main program, we will need to initialize and manage an event loop.
+
+Specifically, we will do the following:
+- create an empty event loop with the asyncio.get_event_loop() method
+- add all of the three counting down tasks into the task queue with AbstractEventLoop.create_task()
+- start running the event loop with AbstractEventLoop.run_until_complete().
+
+Our main program should look like the following:
+
+```py
+# ch10/example2.py
+
+loop = asyncio.get_event_loop()
+tasks = [
+    loop.create_task(count_down('A', 1)),
+    loop.create_task(count_down('B', 0.8)),
+    loop.create_task(count_down('C', 0.5))
+]
+
+start = time.perf_counter()
+loop.run_until_complete(asyncio.wait(tasks))
+
+print('-' * 40)
+print('Done.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example2.py
+
+```
+
+Output:
+
+```bash
+----------------------------------------
+0.5049                  C = 3
+----------------------------------------
+0.8194          B = 3
+----------------------------------------
+1.0239  A = 3
+----------------------------------------
+1.0245                  C = 2
+----------------------------------------
+1.5293                  C = 1
+----------------------------------------
+1.6240          B = 2
+----------------------------------------
+2.0314  A = 2
+----------------------------------------
+2.4279          B = 1
+----------------------------------------
+3.0439  A = 1
+----------------------------------------
+Done.
+```
+
+Summary: Instead of executing individual tasks sequentially, our program now switches between different countdowns and overlaps their processing/waiting times (this results in different letters being printed out in between each other)
+
+How this all works:
+- At the beginning of the program, instead of waiting for the whole first second to print out
+the first message A = 3, the program switches to the next task in the task queue (in this
+case, it is waiting for 0.8 seconds for the letter B).
+- This process continues until 0.5 seconds have passed and C = 3 is printed out, and 0.3 seconds later (at the time 0.8 seconds), B = 3 is printed out.
+This all happens before A = 3 is printed out.
+    - This task-switching property of our asynchronous program makes it significantly more responsive (Instead of hanging for one second before the first message is printed, the program now only takes 0.5 seconds ie. the shortest waiting period to print out its first message)
+- As for the execution time, you can see that this time, it only takes three seconds, in total, to execute the whole program (instead of 6.9 seconds).
+    - This corresponds to what we speculated: that the execution time would be right around the time it takes to execute the largest task.
+
+### A note about blocking functions
+
+As you have seen, we have to replace our original time.sleep() function with its
+equivalent from the asyncio module. This is because time.sleep() is, by nature, a
+blocking function, which means that it cannot be used to implement a task switching event.
+To test this, in our Chapter10/example2.py file (our asynchronous program), we will replace the following line of code (Line 11):
+
+```py
+# correct
+await asyncio.sleep(delay)
+# trial (incorrect - for show)
+time.sleep(delay)
+```
+
+After running this new script, your output will simply be the same as that of our original
+sequential, synchronous program.
+
+So, replacing await `asyncio.sleep()` with `time.sleep()` actually converts our program back to synchronous, ignoring the event loop that we implemented.
+
+What happened was:
+- when our program proceeded to that line inside of the count_down() function, time.sleep() actually blocked and prevented the release of the execution flow
+    - essentially rendering the whole program synchronous once again. 
+
+The following diagram illustrates an example of the difference in execution time between
+blocking and non-blocking file handling:
+
+![Blocking vs. non-blocking](image-36.png)
+
+This phenomenon raises an interesting issue: if a heavy, long-running task is blocking, then
+it is literally impossible to implement asynchronous programming with that task as a
+coroutine
+- if we really wanted to achieve what a blocking function returns in an asynchronous application, we would need to implement another version of that blocking function (could be made into a coroutine and allow for task switching events to take place at at least one point inside the function)
+
+Luckily, after implementing asyncio as one of the official features of Python, Python core
+developers have been on working to produce the coroutine version of the most commonly
+used Python blocking functions
+- This means that if you ever find blocking functions that prevent your program from being truly asynchronous, you will most likely be able to find the coroutine versions of those functions to implement in your program.
+    - However, the fact that there are asynchronous versions of traditionally blocking functions in Python with potentially different APIs means that you will need to familiarize yourself with those APIs from separate functions
+    - Another way to handle blocking functions
+without having to implement their coroutine versions: use an executor to run the
+functions in separate threads or separate processes, to avoid blocking the thread of the
+main event loop
+
+## Asynchronous prime-checking
+
+Moving on from our starting counting-down example, let's reconsider the example from the
+previous chapter.
+
+As a refresher, we have a simple prime-checking
+function, is_prime(x), that prints out messages indicating whether the input integer that
+it takes in, x, is a prime number.
+- In our main program, we call is_prime() on three prime numbers, in an order of decreasing magnitude sequentially.
+- This setup again creates a significant period of time during which the program appears to be hanging while processing the large input, resulting in a low responsiveness for the program.
+
+The output produced by the program will look similar to the following:
+
+```bash
+Processing 9637529763296797...
+9637529763296797 is a prime number.
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+
+```
+
+To implement asynchronous programming for this script, we must do the following:
+1. Create our first main component, the event loop
+- instead of using `'__main__'` scope, we convert `main()` into a separate function
+    - this main() function and is_prime() are the coroutines in this program
+2. Convert `is_prime()` and `main()` into coroutines
+- putting `async` in front of `def`
+- putting the `await` keyword inside each function (to specify the task-switching event)
+    - specifying the task-switching event for `main()`: easy
+        - implement that event while waiting for the task queue by using `aysncio.wait()`
+    - specifying the task-switching event for `is_prime()`: more complicated (there is no clear point where the execution flow should be released back to the event loop)
+        - we want the task-switching event to take place during a heavy, long-running task
+            - this depends on specifics of your program...
+                - coroutine
+                - task queue
+                - individual tasks in the queue
+        - For example: the task queue of our program consists of three numbers: 9637529763296797, 427920331, and 157 (we can consider them as a large task, a medium task, and a small task)
+            - To improve responsiveness, we would like to switch tasks during the large task, and not during the small task (This setup will allow the medium and small tasks to be started, processed, and maybe finished during the execution of the large task, even if the large task is in front in the task queue of the program)
+            - looking at our `is_prime()` coroutine, after checking for edge cases, it iterates a for loop thorugh every odd number under sqrt(input)
+                - inside of this long-running for loop is a great place to switch tasks ie.  release the execution flow back to the event loop
+            - How to choose what point to implement the task-switching event: every 100000 number period (using `asyncio.sleep(0)` command to facilitate the task-switching event)
+                - was looking for a point that is:
+                    - fairly common in the large task
+                    - but as common in the medium task
+                    - non-existent in the small task
+
+```py
+# ch9/example4.py
+
+async def is_prime(x):
+    print('Processing %i...' % x)
+
+    ...
+
+    else:
+        ...
+            elif i % 100000 == 1:
+                await asyncio.sleep(0)
+```
+
+Finally, in our main program (not to be confused with the `main()` coroutine), we create our
+event loop and use it to run our `main()` coroutine, until it completes its execution:
+
+```py
+# ch9/example4.py
+if __name__ == '__main__':
+    try:
+        start = timer()
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
+        print('Took %.2f seconds.' % (timer() - start))
+    except Exception as e:
+        print('There was a problem:')
+        print(str(e))
+    finally:
+        loop.close()
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example4.py
+
+```
+
+Output:
+
+```bash
+Processing 9637529763296797...
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+9637529763296797 is a prime number.
+Took 7.78 seconds.
+```
+
+As you saw in the previous chapter, better responsiveness was achieved through this asynchronous version of the script.
+- Specifically, instead of appearing like it is hanging while processing the first large task, our program now prints out output messages for the other, smaller tasks, before it finishes executing the large task
+
+## Improvements from Python 3.7
+
+As of 2018, Python 3.7 has just come out, with several major new features, such as data
+classes, guaranteed ordered dictionaries, better timing precision, and so on. Asynchronous
+programming and the asyncio module received a number of important improvements.
+
+Notable list:
+1. async and await are now officially reserved keywords in Python.
+- While we have been calling them keywords, Python did not, in fact, treat these words as reserved keywords, up until now.
+    - This means that neither async nor await can be used to name variables or functions in a Python program. If you are using Python 3.7, fire up a Python interpreter and try to use these keywords for variable or function names, and you should receive the following error message:
+
+```bash
+python
+def async():
+await = 0
+exit()
+
+```
+
+Output 1:
+
+```bash
+>>> def async():
+  File "<stdin>", line 1
+    def async():
+```
+
+Output 2:
+
+```bash
+>>> await = 0
+  File "<stdin>", line 1
+    await = 0
+```
+
+2. asyncio allows us to simply run the `main()` coroutine event loop by using `asyncio.run()`
+- you might have noticed from our previous examples that the main program typically contains a
+fair amount of boilerplate code to initiate and run the event loop, which most likely
+remains the same in all asynchronous programs:
+
+```py
+loop = asyncio.get_event_loop()
+asyncio.run_until_complete(main())
+
+```
+
+Now, if main() is a coroutine in your program, you simply run it via `asyncio.run()`:
+
+```py
+asyncio.run(main())
+
+```
+
+This eliminates significant boilerplate code in Python asynchronous programming.
+
+Note: There are other improvements regarding asynchronous programming, in both performance and ease in usage, that were implemented in Python 3.7; however, we will not be discussing them in this book.
+
+## Inherently blocking tasks
+
+In the first example in this chapter, you saw that asynchronous programming can provide our Python programs with better execution time, but that is not always the case.
+- Asynchronous programming alone can only provide improvements in speed if all processing tasks are non-blocking.
+- However, similar to the comparison between concurrency and inherent sequentiality in programming tasks, some computing tasks in Python are inherently blocking, and therefore, they cannot be taken advantage of by asynchronous programming.
+
+- What this means: if your asynchronous programming has inherently blocking tasks in some coroutines, the program will not gain any additional improvement in speed from the asynchronous architecture.
+    - While task-switching events still take place in those programs, which will improve the responsiveness of the programs, no instructions will be overlapping each other, and no additional speed will thus be gained.
+    - In fact, since there is considerable overhead regarding the implementation of asynchronous programming in Python, our programs might even take longer to finish their execution than the original, synchronous programs.
+
+For example, let's look at a comparison in speed between the two versions of our primechecking program.
+- Since the primary processing portion of the program is the is_prime() coroutine, which solely consists of number crunching, we know that this coroutine contains blocking tasks.
+    - So, the asynchronous version is, in fact, expected to run more slowly than the synchronous version.
+
+Let's run the code for each:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example3.py
+python code/Chapter10/example4.py
+
+```
+
+Output #1:
+
+```bash
+Processing 9637529763296797...
+9637529763296797 is a prime number.
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+Took 5.48 seconds.
+```
+
+Output #2:
+
+```bash
+py
+Processing 9637529763296797...
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+9637529763296797 is a prime number.
+Took 8.13 seconds.
+```
+
+The asynchronous program actually took longer to run than the synchronous (sequential) one!
+
+However, this does not mean that if your program contains blocking functions,
+asynchronous programming is out of the question.
+- As mentioned previously, all execution in an asynchronous program, if not specified otherwise, occurs entirely in the same thread and process, and blocking CPU-bound tasks can thus prevent program instructions from overlapping each other.
+    - this is not the case if the tasks are distributed to separate threads/processes.
+    - In other words, threading and multiprocessing can help asynchronous programs with blocking instructions to achieve better execution time.
+
+## concurrent.futures as a solution for blocking tasks
+
+In this section, we will be considering another way to implement threading/multiprocessing: the `concurrent.futures` module
+- designed to be a high-level interface for implementing asynchronous tasks.
+- Specifically, the concurrent.futures module works seamlessly with the asyncio module
+    - it provides an abstract class called `Executor`, which contains the skeleton of the two main classes that implement asynchronous threading and multiprocessing, respectively (as suggested by their names):
+        - `ThreadPoolExecutor`
+        - `ProcessPoolExecutor`
+
+### Changes in the framework
+
+Before we jump into the API from `concurrent.futures`, let's discuss the theoretical
+basics of asynchronous threading/multiprocessing, and how it plays into the framework of
+the asynchronous programming that `asyncio` provides.
+
+Reminder - we have 3 major elements in our ecosystem of asynchronous programming:
+1. the event loop
+2. the coroutines
+3. their corresponding futures
+
+We still need the event loop while utilizing threading/multiprocessing, to coordinate the tasks and handle their returned results (futures), so these elements typically remain consistent with single-threaded asynchronous programming.
+
+As for the coroutines, since the idea of combining asynchronous programming with threading and multiprocessing involves avoiding blocking tasks in the coroutines by executing them in separate threads and processes, the coroutines do not necessarily have to be interpreted as actual coroutines by Python anymore. Instead, they can simply be traditional Python functions.
+
+One new element that we will need to implement is the executor that facilitates threading or multiprocessing;
+- this can be an instance of the `ThreadPoolExecutor` class or the `ProcessPoolExecutor` class. - Now, every time we add a task to our task queue in the event loop, we will also need to reference this executor, so that separate tasks will be executed in separated threads/processes.
+    - This is done through the `AbstractEventLoop.run_in_executor() method`, which takes in the following to be executed in separate threads/processes:
+        - an executor
+        - a coroutine (though, again, it does not have to be an actual coroutine)
+        - arguments for the coroutines
+
+We will see an example of this API in the next section.
+
+## Examples in Python
+
+Let's look at a specific implementation of the concurrent.futures module.
+- Recall that in this chapter's first example (the counting down example), the blocking `time.sleep()` function prevented our asynchronous program from becoming truly asynchronous, and had to be replaced with its non-blocking version, `asyncio.sleep()`.
+- Now, we are executing the individual countdowns in separate threads or processes, which means that the blocking `time.sleep()` function will not pose any problems in terms of executing our program asynchronously.
+
+Navigate to the Chapter10/example5.py file, as follows:
+
+```py
+# ch10/example5.py
+
+from concurrent.futures import ThreadPoolExecutor
+import asyncio
+import time
+
+def count_down(name, delay):
+    indents = (ord(name) - ord('A')) * '\t'
+
+    n = 3
+    while n:
+        time.sleep(delay)
+
+        duration = time.perf_counter() - start
+        print('-' * 40)
+        print('%.4f \t%s%s = %i' % (duration, indents, name, n))
+
+        n -= 1
+
+async def main():
+    futures = [loop.run_in_executor(
+        executor,
+        count_down,
+        *args
+    ) for args in [('A', 1), ('B', 0.8), ('C', 0.5)]]
+
+    await asyncio.gather(*futures)
+
+    print('-' * 40)
+    print('Done.')
+
+start = time.perf_counter()
+executor = ThreadPoolExecutor(max_workers=3)
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+
+```
+
+Notes on what is going on:
+- notice how `count_down()` is a typical function and not a coroutine, ie. no `async`
+- `main()`:
+    - a
+    - using the `run_in_executor()` method during this process
+        - instead of the `create_task()` method that is used in single-threaded asynchronous programming
+- main program:
+    - we need to initiate an executor
+        - in this case, is an instance of the `concurrent.futures.ThreadPoolExecutor` class
+
+Note: The decision between using threading and multiprocessing is, as we discussed in previous chapters, dependent on the nature of the program.
+- Here, we need to share the start variable (holding the time at which the program starts to execute) among separate coroutines, so that they can perform the act of counting down; so, threading is chosen over multiprocessing.
+
+After running the script, your output should be similar to the following:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example5.py
+
+```
+
+Output:
+
+```bash
+----------------------------------------
+0.5052                  C = 3
+----------------------------------------
+0.8050          B = 3
+----------------------------------------
+1.0027  A = 3
+----------------------------------------
+1.0075                  C = 2
+----------------------------------------
+1.5088                  C = 1
+----------------------------------------
+1.6063          B = 2
+----------------------------------------
+2.0035  A = 2
+----------------------------------------
+2.4071          B = 1
+----------------------------------------
+3.0052  A = 1
+----------------------------------------
+Done.
+```
+
+Summary: This output is identical to the one that we obtained from the asynchronous program with pure asyncio support.
+- So, even with a blocking processing function, we were able to make the execution of our program asynchronous, with threading implemented by the concurrent.futures module.
+
+Let's now apply the same concept to our prime-checking problem!
+
+Steps:
+1. Convert `is_prime()` to a normal/non-coroutine form
+2. Setup separate processes to execute the `is_prime()` function
+- is an intensive number-crunching task, so processes are more desirable than threads
+
+Note: An additional benefit of using the original version of `is_prime()` is that we will not have to perform a check of the task-switching condition that we have in our single-threaded asynchronous program (Line 25):
+
+```py
+# ch9/example1.py
+
+elif i % 100000 == 1:
+    await asyncio.sleep(0)
+```
+
+(This will provide us with a significant speedup, as well)
+
+Let's take a look at the Chapter10/example6.py file, as follows:
+
+```py
+# ch10/example6.py
+
+from math import sqrt
+import asyncio
+from concurrent.futures import ProcessPoolExecutor
+from timeit import default_timer as timer
+
+#async def is_prime(x):
+def is_prime(x):
+    print('Processing %i...' % x)
+
+    if x < 2:
+        print('%i is not a prime number.' % x)
+
+    elif x == 2:
+        print('%i is a prime number.' % x)
+
+    elif x % 2 == 0:
+        print('%i is not a prime number.' % x)
+
+    else:
+        limit = int(sqrt(x)) + 1
+        for i in range(3, limit, 2):
+            if x % i == 0:
+                print('%i is not a prime number.' % x)
+                return
+
+        print('%i is a prime number.' % x)
+
+async def main():
+
+    task1 = loop.run_in_executor(executor, is_prime, 9637529763296797)
+    task2 = loop.run_in_executor(executor, is_prime, 427920331)
+    task3 = loop.run_in_executor(executor, is_prime, 157)
+
+    await asyncio.gather(*[task1, task2, task3])
+
+if __name__ == '__main__':
+    try:
+        start = timer()
+
+        executor = ProcessPoolExecutor(max_workers=3)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(main())
+
+        print('Took %.2f seconds.' % (timer() - start))
+
+    except Exception as e:
+        print('There was a problem:')
+        print(str(e))
+
+    finally:
+        loop.close()
+
+```
+
+What is going on here:
+- function definition: `is_prime()`
+- `main()`: async main function
+    - defines the tasks to run in the process pool executor
+        - 3 different processes (via `loop.run_in_executor()`) call is_prime() on 3 different numbers
+        - `asyncio.gather` runs tasks concurrently and waits for all tasks to complete
+- execution block ie. `__main__`: runs the code
+    - executor is init
+        - max 3 workers since we know we have 3 tasks
+    - event loop is started
+        - we run `main()` until it is completed
+    - ensures that the loop is closed properly even if there is an exception
+ 
+This script utilizes multiprocessing (via ProcessPoolExecutor) and asyncio (for managing asynchronous tasks) to efficiently check if large numbers are prime, demonstrating a mix of CPU-bound tasks managed in an asynchronous framework.
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter10/example6.py
+
+```
+
+Output:
+
+```bash
+Processing 9637529763296797...
+Processing 427920331...
+427920331 is a prime number.
+Processing 157...
+157 is a prime number.
+9637529763296797 is a prime number.
+Took 5.70 seconds.
+```
+
+Summary:  the original, synchronous version takes less time than the
+single-threaded asynchronous version, but more than the multiprocessing asynchronous
+version. In other words, by combining multiprocessing with asynchronous programming,
+we get the best of both worlds: the consistent responsiveness from asynchronous
+programming, and the improvement in speed from multiprocessing.
+
+## Summary
+
+In this chapter, you learned about asynchronous programming, which is a model of programming that takes advantage of coordinating computing tasks to overlap the waiting and processing times.
+- There are three main components to an asynchronous program: the event loop, the coroutines, and the futures.
+    - The event loop is in charge of scheduling and managing coroutines using its task queue.
+    - Coroutines are computing tasks that are to be executed asynchronously;
+        - each coroutine has to specify inside of its function exactly where it will give the execution flow back to the event loop (that is, the task-switching event).
+    - Futures are placeholder objects that contain the results obtained from the coroutines.
+- The `asyncio` module, together with the Python keywords `async` and `await`, provides an easy-to-use API and an intuitive framework to implement asynchronous programs;
+    - additionally, this framework makes the asynchronous code just as readable as synchronous code (which is generally quite rare in asynchronous programming)
+    - However, we cannot apply single-threaded asynchronous programming on blocking computing tasks with the `asyncio` module alone.
+        - The solution to this is the `concurrent.futures` module, which provides a high-level API to implement asynchronous threading and multiprocessing, and can be used in addition to the `asyncio` module.
+
+In the next chapter, we will be discussing one of the most common applications of asynchronous programming, Transmission Control Protocol (TCP), as a means of serverclient communication. You will learn about the basics of the concept, how it takes advantage of asynchronous programming, and how to implement it in Python.
+
+---
+
+# Chapter 11 - Building Communication Channels with asyncio
+
+Communication channels are a big part of applied concurrency in the field of computer science.
+
+In this chapter, we will cover the fundamental theories of transports, which are classes provided by the `asyncio` module in order to abstract various forms of communication channels.
+
+We will also cover an implementation of a simple echoing serverclient logic in Python, in order to further illustrate the use of `asyncio` and concurrency in communication systems. (The code for this example will serve as the foundation for an advanced example that will appear later in this book).
+
+The following topics will be covered in this chapter:
+- The fundamentals of communication channels and applying asynchronous programming to them
+- How to build an asynchronous server in Python by using `asyncio` and `aiohttp`
+- How to make requests to multiple servers asynchronously and handle asynchronous file reading and writing
+
+## The ecosystem of communication channels
+
+Communication channels are used to denote both the physical wiring connection between different systems and the logical communication of data that facilitates computer networks. (In this chapter, we will only be concerned with the latter, as it is a problem that is related to
+computing and is more germane to the idea of asynchronous programming)
+
+In this section, we will be discussing the general structure of a communication channel, and two specific elements in that structure that are particularly relevant to asynchronous programming.
+
+### Communication protocol layers
+
+Most data transmission processes that are done through communication channels are facilitated in the form of the Open Systems Interconnection (OSI) model protocol layers.
+- The OSI model lays out the major layers and topics in an intersystem communication process.
+
+The following diagram shows the general structure of an OSI model:
+
+![OSI model structure](image-37.png)
+
+As you can see, there are 7 main layers of communication in a data transmission process, with varying degrees of computing level.
+
+(We will not be going into the details of the purposes and specific functions of each layer, but it is still important that you understand the general ideas behind the media and host layers)
+
+Overview (1-7, where 1 is lowest level, 7 is high):
+- 3 bottom layers: low-level operations
+1. Physical Layer: Cable, Electric Signals
+- coding schemes, access schemes, low-level error detection and correction, bit synchronization, etc.
+    - specify the logic of processing, prepare data before transferring it
+2. Data Link Layer: Switches/MAC Addressing
+3. Network Layer: Logical/IP addrssesing (determines best path for destination)
+- handles forwarding packets of data from one system to another in a computer network (ie. server -> client)
+    - via determining address of recipient, path of data transfer to take
+
+- 4 top layers: high-level communication/manipulation:
+4. Transport Layer (focus): Defines Ports and Reliability
+- conceptual transition between the media layers and the host layers
+    - ie. responsible for sending data along end-to end connections between different systems ie. between client and server
+- directly utilized by the asyncio module in implementing communication channels
+- Additionally, because packets of data (prepared by the network layer) might be lost or corrupted during transmission processes due to network errors, the transport layer is also in charge of detecting these errors via methods in error detection code.
+5. Session Layer: Starts/Ends Session, keeps sessions isolated
+- implement mechanisms for handling, interpreting, and providing the data sent from another system
+- After receiving data from the transport layer, the session layer handles the authentication, authorization, and session restoration processes
+6. Presentation Layer: Type of Data; HTTPS - Encryption Services
+- translates the same data and reorganizes it into an interpretable representation
+7. Application Layer: Access to Application ie. Web Browser ie. Google Chrome
+- displays that data in user-friendly formats
+
+## Asynchronous programming for communication channels
+
+Given the nature of asynchronous programming, it is no surprise that the programming model can provide functionalities that complement the process of facilitating communication channels efficiently.
+- Using the topic of HTTP communication as an example, the server can asynchronously handle multiple clients at the same time; while it is waiting for a specific client to make an HTTP request, it can switch to another client and process that client's request.
+- Similarly, if a client needs to make HTTP requests to multiple servers, and has to wait for large responses from some servers, it can process the more lightweight responses, which have already been processed and were sent back to the client first.
+
+The following diagram shows an example of how servers and clients interact with each other asynchronously in HTTP requests:
+
+![Asynchronous, interleaved HTTP requests](image-38.png)
+
+## Transports and protocols in asyncio
+
+The asyncio module provides a number of different transport classes.
+- In essence, these classes are the implementations of the functionalities of the transport layer that were discussed in the last section
+
+The asyncio module combines the abstract of transports with the implementation of an asynchronous program.
+- Specifically, even though transports are the central elements of communication channels, in order to utilize the transport classes and other relevant communication channel tools, we need to initiate and call an event loop
+    - event loop is an instance of the `asyncio.AbstractEventLoop` class.
+    - The event loop itself will then create the transports and manage the low-level communication procedures.
+
+It is important to note that a `transport` object in an established communication channel in `asyncio` is always associated with an instance of the `asyncio.Protocol class`.
+- As the name suggests, the `Protocol` class specifies the underlying protocols that the communication channels use;
+    - for each connection made with another system, a new protocol object from this class will be created.
+    - While working closely with a transport object, a protocol object can call various methods from the transport object;
+        - this is the point where we can implement the specific inner workings of a communication channel.
+
+For this reason, generally we need to focus on the implementation of an asyncio.Protocol subclass and its methods while building a connection channel.
+- In other words, we use asyncio.Protocol as a parent class to derive a subclass that meets the needs of our communication channel.
+
+To do this, we overwrite the following methods from the `asyncio.Protocol` base class in our own custom protocol subclass:
+- `Protocol.connection_made(transport)`: This method is automatically called whenever a connection from another system is made.
+    - The `transport` argument holds the `transport` object that is associated with the connection.
+    - Again, each `transport` needs to be paired with a protocol;
+        - we generally store this `transport` object as an attribute of this specific protocol object in the `connection_made()` method.
+- `Protocol.data_received(data)`: This method is automatically called whenever the one system that we are connected to sends its data.
+    - Note: the data argument, which holds the sent information, is usually represented in bytes
+        - so the `encode()` function of Python should be used before `data` is processed further.
+
+Next, let us consider the important methods from the transport classes from asyncio. All transport classes inherit from a parent transport class, called asyncio.BaseTransport, for which we have the following common methods:
+- `BaseTransport.get_extra_info()`: returns additional channel-specific information for the calling transport object.
+    - The result can include information regarding the socket, the pipe, and the subprocess associated with that transport.
+        - Later in this chapter, we will be calling BaseTransport.get_extra_info('peername'), in order to obtain the remote address from which the transport traveled.
+- `BaseTransport.close()`: used to close the calling transport object, after which the connections between different systems will be stopped.
+    - The corresponding protocol of the transport will automatically call its `connection_lost()` method.
+    - Out of the many implementations of transport classes, we will focus on the `asyncio.WriteTransport` class
+        - inherits the methods from the `BaseTransport` class and implements other methods that are used to facilitate write-only transport functionalities.
+    - Here, we will be using the `WriteTransport.write()` method
+        - will write the data that we would like to send to the other system that we communicate with via the transport object
+            - As a part of the `asyncio` module, this method is not a blocking function; instead, it buffers and sends out the written data in an asynchronous way
+
+# The big picture of asyncio's server client
+
+You have learned that asynchronous programming, and asyncio specifically, can drastically improve the execution of your communication channels.
+- You have also seen the specific methods that you will need to use when implementing an asynchronous communication channel.
+- Before we dive into a working example in Python, let us briefly discuss the big picture of what we are trying to accomplish ie., the general structure of our program.
+
+As mentioned earlier, we need to implement a subclass of `asyncio.Protocol` to specify the underlying organization of our communication channel.
+- Again, there is an event loop at the heart of each asynchronous program, so we also need to create a server outside of the context of the protocol class, and initiate that server inside of the event loop of our program.
+    - This process will set up the asynchronous architecture of our entire server, and can be done via the `asyncio.create_server()` method, which we will look at in our upcoming example.
+- Finally, we will run the event loop of our asynchronous program forever by using the AbstractEventLoop.run_forever() method.
+    - Similar to an actual, real-life server, we would like to keep our sever running until it encounters a problem, in which case we will close the server gracefully.
+
+The following diagram illustrates this whole process:
+
+![Asynchronous program structure in communication channels](image-39.png)
+
+## Python Examples
+
+### Starting a server
+
+In the `Chapter11/example1.py` file, let's look at the EchoServerClientProtocol class,
+as follows:
+
+```py
+# ch11/example1.py
+
+import asyncio
+
+class EchoServerClientProtocol(asyncio.Protocol):
+    def connection_made(self, transport):
+        peername = transport.get_extra_info('peername')
+        print('Connection from {}'.format(peername))
+        self.transport = transport
+
+    def data_received(self, data):
+        message = data.decode()
+        print('Data received: {!r}'.format(message))
+
+loop = asyncio.get_event_loop()
+coro = loop.create_server(EchoServerClientProtocol, '127.0.0.1', 8888)
+server = loop.run_until_complete(coro)
+
+# Serve requests until Ctrl+C is pressed
+print('Serving on {}'.format(server.sockets[0].getsockname()))
+try:
+    loop.run_forever()
+except KeyboardInterrupt:
+    pass
+
+# Close the server
+server.close()
+loop.run_until_complete(server.wait_closed())
+loop.close()
+
+```
+
+What is going on here:
+- `EchoServerClientProtocol` class (Subclass of asyncio.Protocol)
+    - required methods:
+    - `connection_made(transport)`:
+        - get IP address of connected system via `get_extra_info()` (using peername argument)
+        - print out connection peername
+        - store `transport` in a class attr
+    - `data_received(data)`:
+        - decode data (turn byte data into string object)
+        - print it
+- main:
+    - `asyncio.get_event_loop()` to create an event loop for our asynchronous program
+    - `coro = loop.create_server(EchoServerClientProtocol, '127.0.0.1', 8888)`: we create a server for our communication by having that event loop `loop` call the `create_server()` method;
+        - this method takes in the following:
+            - a subclass from the `asyncio.Protocol` class
+            - an address for our server (in this case, it is our local host: 127.0.0.1)
+            - a port for that address (typically, 8888).
+        - Note: this method does not create the server itself;
+            - it only initiates the process of creating the server asynchronously, and returns a coroutine that will finish the process.
+            - For this reason, we need to store the returned coroutine from the method in a variable (coro, in our case) AND have our event loop run that coroutine.
+    - print A message using the sockets attribute of our server object
+    - run the event loop forever, in order to keep the server running
+        - except for the case of a `KeyboardInterrupt` exception being invoked
+    - at the end of our program, we will handle the house cleaning portion of the script (closing the server gracefully). this is done with the following:
+        - `server.close()`: server object call the close() method
+            - initiates the closing process of the server
+        - `loop.run_until_complete(server.wait_closed())`: using the event loop to run the wait_closed() method on the server object
+            - makes sure that the server is properly closed
+        - `loop.close()`: Finally, we close the event loop
+
+### Installing Telnet
+
+Before running the code: we have to install the Telnet program (in order to correctly simulate a connection channel between a client and a server)
+- Telnet: provides Terminal commands that facilitate protocols for bidirectional, interactive, text-oriented communication
+
+To check if Telnet is installed on a Windows system, you can use the following steps:
+- Control Panel -> Programs -> Programs and Features -> Turn Windows features on or off -> Telnet -> Check the box -> OK
+    - Windows Features will now search for required files...
+
+Check that telnet is installed:
+
+```bash
+telnet
+```
+
+Output:
+
+```bash
+Welcome to Microsoft Telnet Client
+
+Escape Character is 'CTRL+]'
+
+Microsoft Telnet>
+```
+
+### Simulating a connection channel
+
+There are multiple steps to running the following server example.
+
+1. First, we need to run the script to start the server, from which you will obtain the following output:
+
+```bash
+cd mastering_concurrency_in_python
+cd code
+cd Chapter11
+python example1.py
+
+```
+
+```bash
+> python example1.py
+Serving on ('127.0.0.1', 8888)
+```
+
+Note: the program will run until you invoke the Ctrl + C key combination.
+
+2. open another Terminal
+- connect to the server (127.0.0.1) at the specified port (8888); this will server as our client Terminal:
+
+```bash
+telnet 127.0.0.1 8888
+
+```
+
+Server Output:
+
+```bash
+Serving on ('127.0.0.1', 8888)
+Connection from ('127.0.0.1', 59271)
+```
+
+This comes from `connection_made()`
+- we know that the client is making their requests from port 60332 of server 127.0.0.1 (which is the same as the running server, since they are both local)
+
+Client output:
+
+None, my screen went black. Book says this:
+
+```bash
+> telnet 127.0.0.1 8888
+Trying 127.0.0.1...
+Connected to localhost.
+
+```
+
+Another feature that we implemented in the EchoServerClientProtocol class was `data_received()`:
+-  type a message in your client Terminal and press the Return (Enter, for Windows) key.
+    - You will not see any changes in the client Terminal output, but the server Terminal should print out a message
+
+With our current protocol, you can send multiple messages to the server, and can even have
+multiple clients send messages to the server.
+- To implement this, simply open another Terminal and connect to the local server again
+    - This is another result achieved from asynchronous programming, allowing multiple clients to communicate with the same server seamlessly (without using threading or multiprocessing)
+
+## Sending messages back to clients
+
+So, in our current example, we are able to have our asynchronous server receive, read, and process messages from clients.
+- However, in order for our communication channel to be useful, we would also like to send messages from the server to the clients.
+
+In this section, we will update our server to an echo server, which, by definition, will send any and all data that it receives from a specific client back to the client.
+
+To do this, we will be using the write() method from the asyncio.WriteTransport class.
+
+Examine the Chapter11/example2.py file, in the `data_received()` method of the `EchoServerClientProtocol` class, as follows:
+
+```py
+    def data_received(self, data):
+        message = data.decode()
+        print('Data received: {!r}'.format(message))
+
+        self.transport.write(('Echoed back: {}'.format(message)).encode())
+```
+
+After receiving the data from the transport object and printing it out, we write a corresponding message to the transport object, which will go back to the original client.
+- By running the `Chapter11/example2.py` script and simulating the same communication that we implemented in the last example with Telnet or Netcat, you will see that after typing a message in the client Terminal, the client receives an echoed message from the server.
+
+The following is my output after initiating the communication channel and typing in the Hello, World! message:
+
+```bash
+# server
+python example2.py
+
+```
+
+```bash
+# client
+telnet 127.0.0.1 8888
+
+```
+
+Output:
+
+```bash
+Trying 127.0.0.1...
+Connected to localhost.
+Hello, World!
+Echoed back: Hello, World!
+```
+
+In essence, this example illustrates the capability of a bidirectional communication channel that we can implement through a custom asyncio.Protocol class.
+- While running a server, we can obtain data sent from various clients connected to the server, process the data, and finally send the desired result back to the appropriate clients.
+
+### Closing the transports
+
+Occasionally, we will want to forcefully close a transport in a communication channel.
+- For example, it is possible for your server to be overwhelmed with constant communications from multiple clients. (even with asynchronous programming and other forms of concurrency)
+- On the other hand, it is undesirable to have the server completely handle some of the sent requests and plainly reject the rest of the requests as soon as the server is at its maximum capacity.
+
+Remedy: instead of keeping the communication open for each and every client connected to the server, we can specify in our protocol that each connection should be closed after a successful communication
+
+We will do this by using the `BaseTransport.close()` method to forcefully close the calling transport object, which will stop the connection between the server and that specific client. Again, we are modifying the `data_received()` method of the `EchoServerClientProtocol` class in Chapter11/example3.py, as follows:
+
+```py
+# Chapter11/example3.py
+import asyncio
+class EchoServerClientProtocol(asyncio.Protocol):
+ def connection_made(self, transport):
+ peername = transport.get_extra_info('peername')
+ print('Connection from {}'.format(peername))
+ self.transport = transport
+ def data_received(self, data):
+ message = data.decode()
+ print('Data received: {!r}'.format(message))
+ self.transport.write(('Echoed back: {}'.format(message)).encode())
+ print('Close the client socket')
+ self.transport.close()
+loop = asyncio.get_event_loop()
+coro = loop.create_server(EchoServerClientProtocol, '127.0.0.1', 8888)
+server = loop.run_until_complete(coro)
+# Serve requests until Ctrl+C is pressed
+print('Serving on {}'.format(server.sockets[0].getsockname()))
+try:
+ loop.run_forever()
+except KeyboardInterrupt:
+ pass
+# Close the server
+server.close()
+loop.run_until_complete(server.wait_closed())
+loop.close()
+```
+
+Run the script, try to connect to the specified server, and type in some messages, in order to
+see the changes that we implemented. With our current setup, after a client connects and
+sends a message to the server, it will receive an echoed message back, and its connection
+with the server will be closed. The following is the output (again, from the interface of the
+Telnet program) that I obtained after simulating this process with our current
+implementation of the protocol:
+
+```bash
+> telnet 127.0.0.1 8888
+Trying 127.0.0.1...
+Connected to localhost.
+Hello, World!
+Echoed back: Hello, World!
+Connection closed by foreign host.
+
+```
+
+## Client-side communication with aiohttp
+
+In previous sections, we covered examples of implementing asynchronous communication channels with the asyncio module, mostly from the perspective of the server side of the communication process.
+- In other words: we have been considering handling/processing requests sent from external systems. 
+    - However: This is only one side of the equation, and we also have the client side of communication to explore.
+
+In this section, we will discuss applying asynchronous programming to make requests to servers.
+- end goal: efficiently collect data from external systems by asynchronously making requests to those systems
+
+In this section, you will also be introduced to another module that supports asynchronous programming options: `aiohttp` (which stands for Asynchronous I/O HTTP).
+- This module provides high-level functionalities that streamline HTTP communication procedures
+- it also works seamlessly with the `asyncio` module
+    - in order to facilitate asynchronous programming.
+
+### Installing aiohttp and aiofiles
+
+```bash
+pip install aiohttp
+pip install aiofiles
+```
+
+Confirm it worked:
+
+```bash
+python
+import aiohttp
+import aiofiles
+exit()
+```
+
+There will be no error messages if the package has been successfully installed.
+
+## Fetching a website's HTML code
+
+First, let's look at how to make a request and obtain the HTML source code from a single website with `aiohttp`.
+
+Note: even with only one task (a website), our application remains asynchronous, and the structure of an asynchronous program still needs to be implemented.
+
+Now, navigate to the Chapter11/example4.py file, as follows:
+
+```py
+# ch11/example4.py
+
+import aiohttp
+import asyncio
+
+async def get_html(session, url):
+    async with session.get(url, ssl=False) as res:
+        return await res.text()
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        html = await get_html(session, 'http://packtpub.com')
+        print(html)
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(main())
+
+```
+
+What is going on here:
+- coroutine `main()`:
+    - init `aiohttp.ClientSession()` within a context manager
+        - calling/waiting for `get_html()` coroutine to process/return a value
+        - note: we are also placing the async keyword in front of this declaration (the whole context block itself will also be treated as a coroutine)
+-  coroutine `get_html()`:
+    - takes in: session object, url for website we want source code from
+    - init `session.get(url, ssl=False)` within a context manager
+        - we make a get request to the url, store response in `res`
+        - placing async before again so that context block is treated as a coroutine
+            - once we get text in `res`, function returns the value
+                - since the response is an object returned from the `aiohttp.ClientSession` class, its methods are asynchronous functions, so we need to specify the `await` keyword when we call the `text()` function.
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter11/example4.py
+
+```
+
+As you run the program, the entire HTML source code of Packt's website will be printed
+out. For example, the following is a portion of my output:
+
+![HTML source code from aiohttp](image-40.png)
+
+## Writing files asynchronously
+
+Most of the time, we would like to collect data by making requests to multiple websites
+- simply printing out the response HTML code is inappropriate (for many reasons);
+- instead, we'd like to write the returned HTML code to output files.
+    - this process is asynchronous downloading, which is also implemented in the underlying architecture of popular download managers.
+
+To do this, we will use the `aiofiles` module, in combination with `aiohttp` and `asyncio`. 
+Navigate to the Chapter11/example5.py file. First, we will look at the download_html() coroutine, as follows:
+
+```py
+# ch11/example5.py
+
+import aiohttp
+import aiofiles
+import asyncio
+
+import os
+from timeit import default_timer as timer
+
+async def download_html(session, url):
+    async with session.get(url, ssl=False) as res:
+        filename = 'output/%s.html' % os.path.basename(url)
+
+        async with aiofiles.open(filename, 'wb') as f:
+            while True:
+                chunk = await res.content.read(1024)
+                if not chunk:
+                    break
+                await f.write(chunk)
+
+        return await res.release()
+
+```
+
+This is an updated version of the `get_html()` coroutine from the last example.
+
+What is going on here:
+- Instead of using an `aiohttp.ClientSession` instance to make a GET request and print out the returned HTML code, now we write the HTML code to the file using the `aiofiles` module
+    - to facilitate asynchronous file writing, we use the asynchronous `aiofiles.open()` function to read in a file in a context manager
+    - Furthermore, we read the returned HTML in chunks, asynchronously, using the `read()` function for the content attribute of the response object;
+        - this means that after reading 1024 bytes of the current response, the execution flow will be released back to the event loop, and the taskswitching event will take place
+
+The coroutine `main()` and main program are more-or-less the same:
+
+```py
+async def main(url):
+    async with aiohttp.ClientSession() as session:
+        await download_html(session, url)
+
+urls = [
+    'http://packtpub.com',
+    'http://python.org',
+    'http://docs.python.org/3/library/asyncio',
+    'http://aiohttp.readthedocs.io',
+    'http://google.com'
+]
+
+start = timer()
+
+loop = asyncio.get_event_loop()
+loop.run_until_complete(
+    asyncio.gather(*(main(url) for url in urls))
+)
+
+print('Took %.2f seconds.' % (timer() - start))
+```
+
+- coroutine `main()`:
+    - takes in URL, passes that and the `aiohttp.ClientSession` instance into the `download_html()` coroutine
+- main program:
+    - create an event loop
+    - pass each item in the url list to the `main()` coroutine
+
+Run program:
+
+```bash
+cd mastering_concurrency_in_python
+cd code
+cd Chapter11
+python example5.py
+
+```
+
+Output:
+
+```bash
+Took 1.16 seconds.
+```
+
+Additionally, a subfolder named output (inside of the Chapter11 folder) will be filled
+with the downloaded HTML code from each website in our list of URLs.
+- Again, these files were created and written asynchronously, via the functionalities of the `aiofiles` module
+
+Let's compare this async version compared to its corresponding synchronous version:
+
+Run program:
+
+```bash
+cd mastering_concurrency_in_python
+cd code
+cd Chapter11
+python example6.py
+
+```
+
+Output:
+
+```bash
+Took 1.47 seconds.
+Took 2.32 seconds.
+
+```
+
+While it achieved the same results (downloading the HTML code and writing it to files), our sequential program took significantly more time than its asynchronous counterpart.
+
+## Summary
+
+There are seven main layers of communication in a data transmission process, with varying degrees of computing level.
+- The media layers contain fairly low-level operations that interact with the underlying process of the communication channel
+- the host layers deals with high-level data communication and manipulation.
+- Of the seven, the transport layer is often viewed as the conceptual transition between the media layers and the host layers
+    - it is responsible for sending data along end-to-end connections between different systems
+
+Asynchronous programming can provide functionalities that complement the process of efficiently facilitating communication channels.
+- Server-wise, the `asyncio` module combines the abstract of transports with the implementation of an asynchronous program.
+    - Specifically, via its `BaseTransport` and `BaseProtocol` classes, `asyncio` provides different ways to customize the underlying architecture of a communication channel.
+- Together with the `aiohttp` module, `asyncio` offers efficiency and flexibility regarding client-side communication processes.
+- The `aiofiles` module, which can work in conjunction with the other two asynchronous programming modules, can also help to facilitate asynchronous file reading and writing.
+
+We have now explored three of the biggest, most important topics in concurrent programming:
+- threading
+- multiprocessing
+- asynchronous programming.
+
+We have shown how each of them can be applied to various programming problems and provide significant improvements in speed.
+
+In the next chapter of this book, we will start to discuss problems that concurrent programming commonly poses to developers and programmers, starting with deadlocks.
+
+---
+
+# Chapter 12 - Deadlocks
+
+Deadlocks, one of the most common concurrency problems, will be the first problem that we analyze in this book.
+
+In this chapter, we will discuss the theoretical causes of deadlocks in concurrent programming.
+- We will cover a classical synchronization problem in concurrency, called the Dining Philosophers problem, as a real-life example of deadlock.
+- We will also illustrate an actual implementation of deadlock in Python.
+- We will discuss several methods to address the problem.
+- This chapter will also cover the concept of livelock, which is relevant to deadlock and is a relatively common problem in concurrent programming.
+
+The following topics will be covered in this chapter:
+- The idea behind deadlock, and how to simulate it in Python
+- Common solutions to deadlock, and how to implement them in Python
+- The concept of livelock, and its connection to deadlock
+
+### Technical Requirements
+
+n/a (nothing new)
+
+## The concept of deadlock
+
+In the field of computer science, deadlock refers to a specific situation in concurrent programming, in which no progress can be made and the program becomes locked in its current state. In most cases, this phenomenon is caused by a lack of, or mishandled, coordination between different lock objects (for thread synchronization purposes). In this section, we will discuss a thought experiment commonly known as the Dining Philosophers problem, in order to illustrate the concept of deadlock and its causes; from there, you will learn how to simulate the problem in a Python concurrent program.
