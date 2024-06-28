@@ -6151,4 +6151,560 @@ n/a (nothing new)
 
 ## The concept of deadlock
 
-In the field of computer science, deadlock refers to a specific situation in concurrent programming, in which no progress can be made and the program becomes locked in its current state. In most cases, this phenomenon is caused by a lack of, or mishandled, coordination between different lock objects (for thread synchronization purposes). In this section, we will discuss a thought experiment commonly known as the Dining Philosophers problem, in order to illustrate the concept of deadlock and its causes; from there, you will learn how to simulate the problem in a Python concurrent program.
+deadlock: a concurrent program becomes locked in its current state
+- In most cases, this phenomenon is caused by a lack of/mishandled coordination between different lock objects (for thread synchronization purposes).
+
+In this section, we will discuss a thought experiment commonly known as the Dining Philosophers problem, in order to illustrate the concept of deadlock and its causes; from there, you will learn how to simulate the problem in a Python concurrent program.
+
+## The Dining Philosophers problem
+
+The Dining Philosophers problem was first introduced by Edgar Dijkstra (who, as you learned in Chapter 1, Advanced Introduction to Concurrent and Parallel Programming was a leading pioneer in concurrent programming) in 1965.
+- The problem was first demonstrated using different technical terms (resource contention in computer systems), and was later rephrased by Tony Hoare, a British computer scientist and the inventor of the quicksort sorting algorithm.
+
+The problem statement is as follows:
+- Five philosophers sit around a table, and each has a bowl of food in front of them.
+- Placed between these five bowls of food are five forks, so each philosopher has a fork on their left side, and one on their right side.
+
+This setup is demonstrated by the following diagram:
+
+![An illustration of the Dining Philosophers problem](image-41.png)
+
+More:
+- Each silent philosopher is to alternate between thinking and eating.
+Each philosopher is required to have both of the forks around them to be able to pick up the food from their individual bowl, and no fork can be shared between two or more different philosophers.
+- When a philosopher finishes eating a specific amount of food, they are to place both of the forks back in their respective, original locations.
+    - At this point, the philosophers around that philosopher will be able to use those forks.
+- Since the philosophers are silent and cannot communicate with each other, they have no method to let each other know they need the forks to eat.
+    - In other words, the only way for a philosopher to eat is to have both of the forks already available to them.
+
+The question of this problem is to design a set of instructions for the philosophers to efficiently switch between eating and thinking, so that each philosopher is provided with enough food.
+
+Now, a potential approach to this problem would be the following set of instructions:
+1. A philosopher must think until the fork on their left side becomes available. When that happens, the philosopher is to pick it up.
+2. A philosopher must think until the fork on their right side becomes available. When that happens, the philosopher is to pick it up.
+3. If a philosopher is holding two forks, they will eat a specific amount of food from the bowl in front of them, and then the following will apply:
+    - Afterwards, the philosopher has to put the right fork down in its original place
+    - Afterwards, the philosopher has to put the left fork down in its original place
+4. The process repeats from the first bullet point.
+
+It is quite clear how this set of instructions can lead to a situation where no progress can be made; namely, if at the beginning, all of the philosophers start to execute their instructions at the same time.
+- Since all of the forks are on the table at the beginning, and are therefore available to be picked up by nearby philosophers, each philosopher will be able to execute the first instruction (picking up the fork on their left side).
+- Now, after this step, each philosopher will be holding a fork with their left hand, and no forks will be left on the table.
+    - Since no philosopher has both forks in their hands, they cannot proceed to eat their food
+- Furthermore, the set of instructions that they were given specifies that only after a philosopher has eaten a specific amount of food can they put their forks down on the table.
+    - This means that as long as a philosopher has not eaten, they will not release any fork that they are holding. (So, as each philosopher is holding only one fork with their left hand, they cannot proceed to eat or put down the fork they are holding.)
+        - The only time a philosopher gets to eat their food is when their neighboring philosopher puts their fork down, which is only possible if they can eat their own food;
+            - this creates a never-ending circle of conditions that can never be satisfied.
+
+This situation is, in essence, the nature of a deadlock, in which all of the elements of a system are stuck in place, and no progress can be made!
+
+## Deadlock in a concurrent system
+
+With the example of the Dining Philosophers problem in mind, let us consider the formal concept of deadlock, and the relevant theories around it.
+
+Given a concurrent program with multiple threads or processes, the execution flow enters a situation of deadlock if a process (or thread) is waiting on a resource that is being held and utilized by another process, which is, in turn, waiting for another resource that is held by a different process.
+- In other words, processes cannot proceed with their execution instructions while waiting for resources that can only be released after the execution is completed;
+    - therefore, these processes are unable to change their execution states.
+    
+Deadlock is also defined by the conditions that a concurrent program needs to have at the same time in order for deadlock to occur.
+- These conditions were first proposed by the computer scientist Edward G. Coffman, Jr., and are therefore known as the Coffman conditions.
+
+These conditions are as follows:
+- At least one resource has to be in a non-shareable state.
+    - This means that that resource is being held by an individual process (or thread), and cannot be accessed by others;
+        - the resource can only be accessed and held by a single process (or thread) at any given time.
+        - This condition is also known as mutual exclusion.
+- There exists one process (or thread) that is simultaneously accessing a resource and waiting for another held by other processes (or threads).
+    - In other words, this process (or thread) needs access to two resources in order to execute its instructions, one of which it is already holding, the other of which it is waiting for from other processes (or threads).
+    - This condition is called hold and wait.
+- Resources can only be released by a process (or a thread) holding them if there are specific instructions for the process (or thread) to do so.
+    - This is to say that unless the process (or thread) voluntarily and actively releases the resource, that resource remains in a non-shareable state.
+    - This is the no preemption condition.
+- The final condition is called circular wait.
+    - As suggested by the name, this condition specifies that there exists a set of processes (or threads) such that the first process (or thread) in the set is in a waiting state for a resource to be released by the second process (or thread), which, in turn, needs to be waiting for the third process (or thread); finally, the last process (or thread) in the set is waiting for the first one.
+
+Let us quickly take a look at a basic example of deadlock. Consider a concurrent program in which there are two different processes (process A and process B), and two different resources (resource R1 and resource R2), as follows:
+
+![Sample deadlock diagram](image-42.png)
+
+Neither of the resources can be shared across separate processes, and each process needs to access both resources to execute its instructions.
+- Take process A, for example.
+    - It is already holding resource R1, but its also needs R2 to proceed with its execution
+    - However, R2 cannot be acquired by process A, as it is being held by process B. (So, process A cannot proceed.)
+- The same goes for process B, which is holding R2 and needs R1 to proceed.
+    - R1 is, in turn, held by process A.
+
+Python simulation In this section, we will implement the preceding situation in an actual Python program.
+- Specifically, we will have two locks (we will call them lock A and lock B), and two separate threads interacting with the locks (thread A and thread B).
+- In our program, we will set up a situation in which thread A has acquired lock A and is waiting to acquire lock B, which has already been acquired by thread B, which is, in turn, waiting for lock A to be released.
+
+Let us consider the Chapter12/example1.py file, as follows:
+
+```py
+# ch12/example1.py
+
+import threading
+import time
+
+def thread_a():
+    print('Thread A is starting...')
+
+    print('Thread A waiting to acquire lock A.')
+    lock_a.acquire()
+    print('Thread A has acquired lock A, performing some calculation...')
+    time.sleep(2)
+
+    print('Thread A waiting to acquire lock B.')
+    lock_b.acquire()
+    print('Thread A has acquired lock B, performing some calculation...')
+    time.sleep(2)
+
+    print('Thread A releasing both locks.')
+    lock_a.release()
+    lock_b.release()
+
+def thread_b():
+    print('Thread B is starting...')
+
+    print('Thread B waiting to acquire lock B.')
+    lock_b.acquire()
+    print('Thread B has acquired lock B, performing some calculation...')
+    time.sleep(5)
+
+    print('Thread B waiting to acquire lock A.')
+    lock_a.acquire()
+    print('Thread B has acquired lock A, performing some calculation...')
+    time.sleep(5)
+
+    print('Thread B releasing both locks.')
+    lock_b.release()
+    lock_a.release()
+
+lock_a = threading.Lock()
+lock_b = threading.Lock()
+
+thread1 = threading.Thread(target=thread_a)
+thread2 = threading.Thread(target=thread_b)
+
+thread1.start()
+thread2.start()
+
+thread1.join()
+thread2.join()
+
+print('Finished.')
+
+```
+
+What is going on here:
+
+In this script, the `thread_a()` and `thread_b()` functions specify our thread A and thread B.
+- In our main program, we also have two threading.Lock objects: lock A and lock B. The general structure of the thread instructions is as follows:
+1. . Start the thread
+2. Try to acquire the lock with the same name as the thread (thread A will try to acquire lock A, and thread B will try to acquire lock B)
+3. Perform some calculations
+4. Try to acquire the other lock (thread A will try to acquire lock B, and thread B will try to acquire lock A)
+- THIS is where the deadlock occurs (!!!)
+5. Perform some other calculations
+6. Release both locks
+7. End the thread
+
+Note that we are using the time.sleep() function to simulate the action of some
+calculations being processed.
+
+Order of operations:
+- First of all, we are starting both thread A and thread B almost simultaneously, within the main program.
+    - thread A will try to acquire lock A, and will succeed in doing so, since lock A is still available at this point.
+    - The same goes for thread B and lock B.
+    - The two threads will then go on to perform some calculations on their own.
+- Let us consider the current state of our program:
+    - lock A has been acquired by thread A, and lock B has been acquired by thread B.\
+    - After their respective calculation processes are complete, thread A will then try to acquire lock B, and thread B will try to acquire lock A.
+    - We can easily see that this is the beginning of our deadlock situation:
+        - since lock B is already being held by thread B, and cannot be acquired by thread A
+        - thread B, for the same reason, cannot acquire lock A.
+        - Both of the threads will now wait infinitely, in order to acquire their respective second lock.
+            - However, the only way a lock can be released is for a thread to continue its execution instructions and release all of the locks it has at the end.
+            - Our program will therefore be stuck in its execution at this point, and no further progress will be made.
+
+
+The following diagram further illustrates the process of how the deadlock unfolds, in sequence:
+
+![Deadlock sequence diagram](image-43.png)
+
+Now, let's see the deadlock that we have created in action. Run the script, and you should
+obtain the following output:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example1.py
+
+```
+
+Output:
+
+```bash
+Thread A is starting...
+Thread A waiting to acquire lock A.
+Thread B is starting...
+Thread A has acquired lock A, performing some calculation...
+Thread B waiting to acquire lock B.
+Thread B has acquired lock B, performing some calculation...
+Thread A waiting to acquire lock B.
+Thread B waiting to acquire lock A.
+```
+
+Note: You will need to start a new cmd/terminal
+
+As we discussed, since each thread is trying to acquire a lock that is currently held by the
+other thread, and the only way for a lock to be released is for a thread to continue its
+execution. This is a deadlock, and your program will hang infinitely, never reaching the
+final print statement in the last line of the program.
+
+## Approaches to deadlock situations
+
+As we have seen, deadlock can lead our concurrent programs to an infinite hang, which is
+undesirable in every way.
+
+In this section, we will be discussing potential approaches to prevent deadlocks from occurring. - Intuitively, each approach looks to eliminate one of the four Coffman conditions from our program, in order to prevent deadlocks.
+
+### Implementing ranking among resources
+
+From both the Dining Philosophers problem and our Python example, we can see that the last condition of the four Coffman conditions, circular wait, is at the heart of the problem of deadlock.
+- It specifies that the different processes (or threads) in our concurrent program wait for resources held by other processes (or threads) in a circular manner.
+- Giving this a closer look, we can see that the root cause for this condition is the order (or lack thereof) in which the processes (or threads) access the resources.
+
+In the Dining Philosophers problem, each philosopher is instructed to pick up the fork on their left side first, while in our Python example, the threads always try to acquire the locks with the same name before performing any calculations.
+- As you have seen, when the philosophers want to start eating at the same time, they will pick up their respective left forks, and will be stuck in an infinite wait;
+- similarly, when the two threads start their execution at the same time, they will acquire their individual locks, and, again, they will wait for the other locks infinitely.
+
+The conclusion that we can infer from this is that if, instead of accessing the resources arbitrarily, the processes (or threads) were to access them in a predetermined, static order, the circular nature of the way that they acquire and wait for the resources will be eliminated.
+- So, for our two-lock Python example, instead of having thread A try to acquire lock A and thread B try to acquire lock B in their respective execution instructions, we will require that both threads try to acquire the locks in the same order.
+- For example, both threads will now try to acquire lock A first, perform some calculations, try to acquire lock B, perform further calculations, and finally, release both threads.
+
+This change is implemented in the Chapter12/example2.py file, as follows:
+
+```py
+# ch12/example2.py
+
+import threading
+import time
+
+def thread_a():
+    print('Thread A is starting...')
+
+    print('Thread A waiting to acquire lock A.')
+    lock_a.acquire()
+    print('Thread A has acquired lock A, performing some calculation...')
+    time.sleep(2)
+
+    print('Thread A waiting to acquire lock B.')
+    lock_b.acquire()
+    print('Thread A has acquired lock B, performing some calculation...')
+    time.sleep(2)
+
+    print('Thread A releasing both locks.')
+    lock_a.release()
+    lock_b.release()
+
+def thread_b():
+    print('Thread B is starting...')
+
+    print('Thread B waiting to acquire lock A.')
+    lock_a.acquire()
+    print('Thread B has acquired lock A, performing some calculation...')
+    time.sleep(5)
+
+    print('Thread B waiting to acquire lock B.')
+    lock_b.acquire()
+    print('Thread B has acquired lock B, performing some calculation...')
+    time.sleep(5)
+
+    print('Thread B releasing both locks.')
+    lock_b.release()
+    lock_a.release()
+
+lock_a = threading.Lock()
+lock_b = threading.Lock()
+
+thread1 = threading.Thread(target=thread_a)
+thread2 = threading.Thread(target=thread_b)
+
+thread1.start()
+thread2.start()
+
+thread1.join()
+thread2.join()
+
+print('Finished.')
+
+```
+
+Run the code:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example2.py
+
+```
+
+This version of the script is now able to finish its execution, and should produce the
+following output:
+
+```bash
+> python3 example2.py
+Thread A is starting...
+Thread A waiting to acquire lock A.
+Thread A has acquired lock A, performing some calculation...
+Thread B is starting...
+Thread B waiting to acquire lock A.
+Thread A waiting to acquire lock B.
+Thread A has acquired lock B, performing some calculation...
+Thread A releasing both locks.
+Thread B has acquired lock A, performing some calculation...
+Thread B waiting to acquire lock B.
+Thread B has acquired lock B, performing some calculation...
+Thread B releasing both locks.
+Finished.
+
+```
+
+This approach efficiently eliminates the problem of deadlock in our two-lock example, but
+how well does it hold up for the Dining Philosophers problem?\
+- To answer this question, let's try to simulate the problem and the solution in Python by ourselves.
+
+The Chapter12/example3.py file contains the implementation of the Dining Philosophers problem in Python, as follows:
+
+```py
+# ch12/example3.py
+
+import threading
+
+# The philosopher thread
+def philosopher(left, right):
+    while True:
+        with left:
+             with right:
+                 print(f'Philosopher at {threading.currentThread()} is eating.')
+
+# The chopsticks
+N_FORKS = 5
+forks = [threading.Lock() for n in range(N_FORKS)]
+
+# Create all of the philosophers
+phils = [threading.Thread(
+    target=philosopher,
+    args=(forks[n], forks[(n + 1) % N_FORKS])
+) for n in range(N_FORKS)]
+
+# Run all of the philosophers
+for p in phils:
+    p.start()
+
+```
+
+What is going on here:
+- `philosopher()`: underlying logic for our separate threads
+    - takes in two Threading.Lock objects and simulates the previously discussed eating procedure, with two context managers
+- main program:
+    - create a list of 5 lock objects (`forks`)
+    - create a list of 5 threads (`phils`)
+        - thread 1: takes locks 1/2
+        - thread 2: takes locks 2/3
+        - etc.
+        - thread 5: takes locks 5/1
+    - start all 5 threads at once
+
+Run the script, and it can easily be observed that deadlock occurs almost immediately. The
+following is my output, up until the program hangs infinitely:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example3.py
+
+```
+
+```bash
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-1 (philosopher), started 28472)> is eating.
+Philosopher at <Thread(Thread-3 (philosopher), started 388)> is eating.
+
+...
+
+```
+
+The question that naturally follows is: how can we implement an order in which the locks are acquired in the philosopher() function?
+- We will be using the built-in id() function in Python
+    - returns the unique, constant identity of the parameter, as the keys to sort the lock objects.
+- We will also implement a custom context manager
+    - in order to factor out this sorting logic in a separate class.
+
+Navigate to `Chapter12/example4.py` for this specific implementation, as follows:
+
+```py
+# ch4/example4.py
+
+import threading
+
+class acquire(object):
+    def __init__(self, *locks):
+        self.locks = sorted(locks, key=lambda x: id(x))
+
+    def __enter__(self):
+        for lock in self.locks:
+            lock.acquire()
+
+    def __exit__(self, ty, val, tb):
+        for lock in reversed(self.locks):
+            lock.release()
+        return False
+
+# The philosopher thread
+def philosopher(left, right):
+    while True:
+        with acquire(left,right):
+             print(f'Philosopher at {threading.currentThread()} is eating.')
+
+# The chopsticks
+N_FORKS = 5
+forks = [threading.Lock() for n in range(N_FORKS)]
+
+# Create all of the philosophers
+phils = [threading.Thread(
+    target=philosopher,
+    args=(forks[n], forks[(n + 1) % N_FORKS])
+) for n in range(N_FORKS)]
+
+# Run all of the philosophers
+for p in phils:
+    p.start()
+
+```
+
+What is going on here:
+- main program: same
+- 
+
+this script will produce an output showing that this solution of ranking can effectively address the Dining Philosophers problem:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example4.py
+
+```
+
+```bash
+*it continually cycles between each thread eating, so it works!*
+
+```
+
+However, there is a problem with this approach when it is applied to some particular cases.
+Keeping the high-level idea of concurrency in mind, we know that one of our main goals
+when applying concurrency to our programs is to improve the speed. Let us go back to our
+two-lock example and examine the execution time of our program with resource ranking
+implemented. Take a look at the Chapter12/example5.py file; it is simply the two-lock
+program with ranked (or ordered) locking implemented, combined with a timer that is
+added to keep track of how much time it takes for the two threads to finish executing.
+After running the script, your output should look similar to the following:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example5.py
+
+```
+
+```bash
+Thread A is starting...
+Thread A waiting to acquire lock A.
+Thread A has acquired lock A, performing some calculation...
+Thread B is starting...
+Thread B waiting to acquire lock A.
+Thread A waiting to acquire lock B.
+Thread A has acquired lock B, performing some calculation...
+Thread A releasing both locks.
+Thread B has acquired lock A, performing some calculation...
+Thread B waiting to acquire lock B.
+Thread B has acquired lock B, performing some calculation...
+Thread B releasing both locks.
+Took 14.01 seconds.
+Finished.
+
+```
+
+You can see that the combined execution of both threads took around 14 seconds.
+- However, if we take a closer look at the specific instructions in the two threads, we can see that aside from interacting with the locks...
+    - thread A would take around 4 seconds to do its calculations (simulated by two time.sleep(2) commands)
+    - thread B would take around 10 seconds (two time.sleep(5) commands).
+
+Does this mean that our program is taking as long as it would if we were to execute the two threads sequentially?
+
+We will test this theory with our Chapter12/example6.py file, in which we specify that each thread should execute its instructions one at a time, in our main program:
+
+```py
+# main - example6.py
+lock_a = threading.Lock()
+lock_b = threading.Lock()
+
+thread1 = threading.Thread(target=thread_a)
+thread2 = threading.Thread(target=thread_b)
+
+start = timer()
+
+thread1.start()
+thread1.join()
+
+thread2.start()
+thread2.join()
+
+print('Took %.2f seconds.' % (timer() - start))
+print('Finished.')
+```
+
+Run this script, and you will see that this sequential version of our two-lock program will
+take the same amount of time as its concurrent counterpart:
+
+```bash
+cd mastering_concurrency_in_python
+python code/Chapter12/example6.py
+
+```
+
+```bash
+Thread A is starting...
+Thread A waiting to acquire lock A.
+Thread A has acquired lock A, performing some calculation...
+Thread B is starting...
+Thread B waiting to acquire lock A.
+Thread A waiting to acquire lock B.
+Thread A has acquired lock B, performing some calculation...
+Thread A releasing both locks.
+Thread B has acquired lock A, performing some calculation...
+Thread B waiting to acquire lock B.
+Thread B has acquired lock B, performing some calculation...
+Thread B releasing both locks.
+Took 14.01 seconds.
+Finished.
+
+```
+
+This interesting phenomenon is a direct result of the heavy requirements that we have placed on the locks in the program.
+- In other words, since each thread has to acquire both locks to complete its execution, each lock cannot be acquired by more than one thread at any given time
+- the locks are required to be acquired in a specific order, and the execution of individual threads cannot happen simultaneously.
+    - If we were to go back and examine the output produced by the Chapter12/example5.py file, it would be apparent that thread B could not start its calculations after thread A released both locks at the end of its execution. It is quite intuitive, then, to arrive at the conclusion that if you placed enough locks on the resources of your concurrent program, it would become entirely sequential in its execution, and, combined with the overhead of concurrent programming functionalities, it would have an even worse speed than the purely sequential version of the program.
+
+However, we did not see in the Dining Philosophers problem (simulated in Python) this sequentiality created by locks.
+- This is because in the two-thread problem, two locks were enough to sequentialize the program execution
+- while five were not enough to do the same for the Dining Philosophers problem.
+
+We will explore another instance of this phenomenon in Chapter 14, Race Conditions.
+
+## Ignoring locks and sharing resources
+
+Locks are undoubtedly an important tool in synchronization tasks, and in concurrent programming in general. However, if the use of locks leads to an undesirable situation, such as a deadlock, then it is quite natural for us to explore the option of simply not using locks in our concurrent programs. By ignoring locks, our program's resources effectively become shareable among different processes/threads in a concurrent program, thus eliminating the first of the four Coffman conditions: mutual exclusion. This approach to the problem of deadlock can be straightforward to implement; let us try with the two preceding examples. In the two-lock example, we simply remove the code specifying any interaction with the lock objects both inside the thread functions and in the main program. In other words, we are not utilizing a locking mechanism anymore. The Chapter12/example7.py file contains the implementation of this approach, as follows:

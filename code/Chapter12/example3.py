@@ -7,7 +7,7 @@ def philosopher(left, right):
     while True:
         with left:
              with right:
-                 print(f'Philosopher at {threading.currentThread()} is eating.')
+                 print(f'Philosopher at {threading.current_thread()} is eating.')
 
 # The chopsticks
 N_FORKS = 5
