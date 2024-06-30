@@ -6707,4 +6707,260 @@ We will explore another instance of this phenomenon in Chapter 14, Race Conditio
 
 ## Ignoring locks and sharing resources
 
-Locks are undoubtedly an important tool in synchronization tasks, and in concurrent programming in general. However, if the use of locks leads to an undesirable situation, such as a deadlock, then it is quite natural for us to explore the option of simply not using locks in our concurrent programs. By ignoring locks, our program's resources effectively become shareable among different processes/threads in a concurrent program, thus eliminating the first of the four Coffman conditions: mutual exclusion. This approach to the problem of deadlock can be straightforward to implement; let us try with the two preceding examples. In the two-lock example, we simply remove the code specifying any interaction with the lock objects both inside the thread functions and in the main program. In other words, we are not utilizing a locking mechanism anymore. The Chapter12/example7.py file contains the implementation of this approach, as follows:
+Locks are undoubtedly an important tool in synchronization tasks, and in concurrent programming in general.
+- However, if the use of locks leads to an undesirable situation (ie. deadlock), then it is quite natural for us to explore the option of simply not using locks at all.
+- By ignoring locks, our program's resources effectively become shareable among different processes/threads in a concurrent program
+    - eliminating the first of the four Coffman conditions: mutual exclusion.
+
+This approach to the problem of deadlock can be straightforward to implement; let us try with the two preceding examples.
+- In the two-lock example, we simply remove the code specifying any interaction with the lock objects both inside the thread functions and in the main program.
+    - In other words, we are not utilizing a locking mechanism anymore.
+
+The Chapter12/example7.py file contains the implementation of this approach, as follows:
+
+```py
+# ch12/example7.py
+
+import threading
+import time
+from timeit import default_timer as timer
+
+def thread_a():
+    print('Thread A is starting...')
+
+    print('Thread A is performing some calculation...')
+    time.sleep(2)
+
+    print('Thread A is performing some calculation...')
+    time.sleep(2)
+
+def thread_b():
+    print('Thread B is starting...')
+
+    print('Thread B is performing some calculation...')
+    time.sleep(5)
+
+    print('Thread B is performing some calculation...')
+    time.sleep(5)
+
+thread1 = threading.Thread(target=thread_a)
+thread2 = threading.Thread(target=thread_b)
+
+start = timer()
+
+thread1.start()
+thread2.start()
+
+thread1.join()
+thread2.join()
+
+print('Took %.2f seconds.' % (timer() - start))
+
+print('Finished.')
+
+```
+
+Run the script, and your output should look similar to the following:
+
+```sh
+cd mastering_concurrency_in_python
+python code/Chapter12/example7.py
+
+```
+
+Output:
+
+```sh
+
+```
+
+Summary: threads run completely in parallel
+- since we are not using locks to restrict access to any calculation processes, the executions of the two threads have now become entirely independent of one another
+    - For this reason, we also obtained a better speed: since the threads ran in parallel, the total time that the whole program took was the same as the time that the longer task of the two threads took (in other words, thread B, with 10 seconds).
+
+### What about the Dining Philosophers problem?
+
+It seems that we can also conclude that without locks (the forks), the problem can be solved easily.
+- Since the resources (food) are unique to each philosopher (in other words, no philosopher should eat another philosopher's food), it should be the case that each philosopher can proceed with their execution without worrying about the others.
+- By ignoring the locks, each can be executed in parallel, similar to what we saw in our two-lock example.
+
+Doing this, however, means that we are completely misunderstanding the problem.
+- We know that locks are utilized so that processes and threads can access the shared resources in a program in a systematic, coordinated way, to avoid mishandling the data.
+    - Therefore, removing any locking mechanisms in a concurrent program means that the likelihood of the shared resources, which are now free from access limitations, being manipulated in an uncoordinated way (and therefore, becoming corrupted) increases significantly.
+    - So, by ignoring locks, it is relatively likely that we will need to completely redesign and restructure our concurrent program.
+        - If the shared resources still need to be accessed and manipulated in an organized way, other synchronization methods will need to be implemented.
+        - The logic of our processes and threads might need to be altered to appropriately interact with this new synchronization method
+            - the execution time might be negatively affected by this change in the structure of the program, and other potential synchronization problems might also arise.
+
+### An additional note about locks
+
+While the approach of dismissing locking mechanisms in our program to eliminate deadlocks might raise some questions and concerns, it does effectively reveal a new point for us about lock objects in Python: it is possible for an element of a concurrent program to completely bypass the locks when accessing a given resource.
+- In other words, lock objects only prevent different processes/threads from accessing and manipulating a shared resource if those processes or threads actually acquire the lock objects.
+- Locks, then, do not actually lock anything.
+    - They are simply flags that help to indicate whether a resource should be accessed at a given time;
+    - if a poorly instructed, or even malicious, process/thread attempts to access that resource without checking the lock object exists, it will most likely be able to do that without difficulty.
+
+In other words, locks are not at all connected to the resources that they are supposed to lock, and they most certainly do not block processes/threads from accessing those resources.
+
+The simple use of locks is therefore inefficient to design and implement a secure, dynamic, concurrent data structure.
+- To achieve that, we would need to either add more concrete links between the locks and their corresponding resources, or utilize a different synchronization tool altogether
+    - (for example, atomic message queues).
+
+### Concluding note on deadlock solutions
+
+You have seen two of the most common approaches to the problem of deadlock.
+- Each addresses one of the four Coffman conditions, and, while both (somewhat) successfully prevent deadlocks from occurring in our examples, each raises different, additional problems and concerns.
+- It is therefore important to truly understand the nature of your concurrent programs, in order to know which of the two is applicable, if either of them are.
+
+It is also possible that some programs, through deadlock, are revealed to us as unsuitable to be made concurrent;
+- some programs are better left sequential, and will be made worse with forced concurrency.
+    - As we have discussed, while concurrency provides significant improvements in many areas of our applications, some are inherently inappropriate for the application of concurrent programming.
+- In situations of deadlock, developers should be ready to consider different approaches to designing a concurrent program, and should not be reluctant to implement another method when one concurrent approach does not work.
+
+
+## The concept of livelock
+
+The concept of livelock is connected to deadlock; some even consider it an alternate version of deadlock.
+- In a livelock situation, the processes (or threads) in the concurrent program are able to switch their states; in fact, they switch states constantly.
+    - Yet, they simply switch back and forth infinitely, and no progress is made.
+
+We will now consider an actual scenario of livelock.
+
+Suppose that a pair of spouses are eating dinner together at a table.
+- They only have one fork to share with each other, so only one of them can eat at any given point
+- Additionally, the spouses are really polite to each other, so even if one spouse is hungry and wants to eat their food, they will leave the fork on the table if their partner is also hungry.   
+    - This specification is at the heart of creating a livelock for this problem: when both spouses are hungry, each will wait for the other to eat first, creating a infinite loop in which each spouse switches between wanting to eat and waiting for the other spouse to eat.
+
+Let's simulate this problem in Python. Navigate to `Chapter12/example8.py`, and take a look at the `Spouse` class:
+
+```py
+# ch12/example8.py
+
+import threading
+import time
+
+class Spouse(threading.Thread):
+
+    def __init__(self, name, partner):
+        threading.Thread.__init__(self)
+        self.name = name
+        self.partner = partner
+        self.hungry = True
+
+    def run(self):
+        while self.hungry:
+            print('%s is hungry and wants to eat.' % self.name)
+
+            if self.partner.hungry:
+                print('%s is waiting for their partner to eat first...' % self.name)
+            else:
+                with fork:
+                    print('%s has stared eating.' % self.name)
+                    time.sleep(5)
+
+                    print('%s is now full.' % self.name)
+                    self.hungry = False
+
+```
+
+What is going on here:
+- `Spouse`: inherits from `threading.Thread`
+    - init: takes in name, and other `Spouse` object as `partner, hungry=True (by default)
+    - run(): logic for when thread is started
+        - checks if partner is hungry
+            - if yes: prints waiting
+            - if not: takes fork (lock object), eats for 5 seconds, becomes full, releases fork
+
+And now in the main program:
+- we create the fork as a lock object first;
+- then, we create two Spouse thread objects, which are each other's partner attributes.
+- Finally, we start both threads, and run the program until both threads finish executing
+
+```py
+# Chapter12/example8.py
+
+fork = threading.Lock()
+
+partner1 = Spouse('Wife', None)
+partner2 = Spouse('Husband', partner1)
+partner1.partner = partner2
+
+partner1.start()
+partner2.start()
+
+partner1.join()
+partner2.join()
+
+print('Finished.')
+
+```
+
+Run the script, and you will see that, as we discussed, each thread will go into an infinite loop, switching between wanting to eat and waiting for its partner to eat; the program will run forever, until Python is interrupted. The following code shows the first few lines of the output that I obtained:
+
+```sh
+cd mastering_concurrency_in_python
+python code/Chapter12/example8.py
+
+```
+
+Output:
+
+```sh
+> python3 example8.py
+Wife is hungry and wants to eat.
+Wife is waiting for their partner to eat first...
+Husband is hungry and wants to eat.
+Wife is hungry and wants to eat.
+Husband is waiting for their partner to eat first...
+Wife is waiting for their partner to eat first...
+Husband is hungry and wants to eat.
+Wife is hungry and wants to eat.
+Husband is waiting for their partner to eat first...
+Wife is waiting for their partner to eat first...
+Husband is hungry and wants to eat.
+Wife is hungry and wants to eat.
+Husband is waiting for their partner to eat first...
+...
+
+```
+
+## Summary
+
+deadlock: a specific situation where no progress is made and the program is locked in its current state
+- In most cases: causes by mishandled coordination between different lock objects
+- problem can be illustrated with the Dining Philosophers problem.
+
+Potential approaches to preventing deadlocks from occurring include:
+- imposing an order for the lock objects and sharing non-shareable resources by ignoring lock objects.
+    - Each solution addresses one of the four Coffman conditions, and, while both solutions can successfully prevent deadlocks, each raises different, additional problems and concerns.
+
+Connected to the concept of deadlock is livelock.
+- In a livelock situation, processes (or threads) in the concurrent program are able to switch their states, but they simply switch back and forth infinitely, and no progress is made.
+
+In the next chapter, we will discuss another common problem in concurrent programming: starvation.
+
+---
+
+# Chapter 13 - Starvation
+
+In this chapter, we will discuss the concept of starvation and its potential causes in concurrent programming.
+- We will cover a number of readers-writers problems, which are prime examples of starvation, and we will simulate them in example Python code.
+- This chapter will also cover the relationship between deadlock and starvation, as well as some potential solutions for starvation.
+
+The following topics will be covered in this chapter:
+- The basic idea behind starvation, its root causes, and some more relevant concepts
+- A detailed analysis of the readers-writers problem, which is used to illustrate the complexity of starvation in a concurrent system
+
+### Technical requirements
+
+n/a
+
+## The concept of starvation
+
+Starvation is a problem in concurrent systems, in which a process (or a thread) cannot gain access to the necessary resources in order to proceed with its execution and, therefore, cannot make any progress.
+
+In this section, we will look into the characteristics of a starvation situation, analyze the most common causes of starvation, and finally, consider a sample program that exemplifies starvation. 
+
+### What is starvation?
+
+It is quite common for a concurrent program to implement some sort of ordering between the different processes in its execution. For example, consider a program that has three separate processes, as follows: One is responsible for handling extremely pressing instructions that need to be run as soon as the necessary resources become available Another process is responsible for other important executions, which are not as essential as the tasks in the first process The last one handles miscellaneous, very infrequent tasks Furthermore, these three process need to utilize the same resources in order to execute their respective instructions
