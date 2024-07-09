@@ -6963,4 +6963,78 @@ In this section, we will look into the characteristics of a starvation situation
 
 ### What is starvation?
 
-It is quite common for a concurrent program to implement some sort of ordering between the different processes in its execution. For example, consider a program that has three separate processes, as follows: One is responsible for handling extremely pressing instructions that need to be run as soon as the necessary resources become available Another process is responsible for other important executions, which are not as essential as the tasks in the first process The last one handles miscellaneous, very infrequent tasks Furthermore, these three process need to utilize the same resources in order to execute their respective instructions
+It is quite common for a concurrent program to implement some sort of ordering between the different processes in its execution.
+
+For example, consider a program that has three separate processes, as follows:
+- One is responsible for handling extremely pressing instructions that need to be run as soon as the necessary resources become available
+- Another process is responsible for other important executions, which are not as essential as the tasks in the first process
+- The last one handles miscellaneous, very infrequent tasks
+
+Furthermore, these three process need to utilize the same resources in order to execute their respective instructions.
+
+Intuitively, we have every reason to implement a specification that allows the first process to have the highest priority of execution and access to resources, then the second process, and then the last process, with the lowest priority.
+- However, imagine situations in which the first two processes (with higher priorities) run so often that the third process cannot execute its instructions; anytime the third process needs to run, it checks to see whether the resources are available to be used and finds out that one of the other, higher-priority processes is using them.
+    - This is a situation of starvation: the third process is given no opportunity to execute and, therefore, no progress can be made with that process.
+    - In a typical concurrent program, it is quite common to have more than three processes at different priority levels, yet the situation is fundamentally similar: some processes are given more opportunities to run and, therefore, they are constantly executing.
+        - Others have lower priorities and cannot access the necessary resources to execute.
+
+## Scheduling
+
+In the next few subsections, we will be discussing the potential candidates that cause starvation situations.
+- Most of the time, a poorly coordinated set of scheduling instructions is the main cause of starvation.
+
+For example, a considerably naive algorithm that deals with three separate tasks might implement constant communication and interaction between the first two tasks.
+- This setup leads to the fact that the execution flow of the algorithm switches solely between the first and second tasks, while the third finds itself idle and unable to make any progress with its execution; in this case, because it is starved of CPU execution flow.
+- Intuitively, we can identify the root of the problem as the fact that the algorithm allows the first two tasks to always dominate the CPU, and hence, effectively prevents any other task to also utilize the CPU.
+- A characteristic of a good scheduling algorithm is the ability to distribute the execution flow and allocate the resources equally and appropriately.
+
+As mentioned previously, many concurrent systems and programs implement a specific order of priority, in terms of process and thread execution.
+- This implementation of ordered scheduling may very likely lead to the starvation of processes and threads of lower priorities and can result in a condition called priority inversion.
+
+Suppose that, in your concurrent program, you have
+- process A of the highest priority
+- process B of a medium priority, and finally
+- process C of the lowest priority;
+    - process C would most likely be put in the situation of starvation.
+        - Additionally, if the execution of process A, the prioritized process, is dependent on the completion of process C, which is already in starvation, then process A might never be able to complete its execution either (even though it is given the highest priority in the concurrent program)
+
+The following diagram further illustrates the concept of priority inversion: a high-priority task running from the time t2 to t3 needs to access some resources, which are being utilized by a low-priority task:
+
+![Diagram of priority inversions](image-44.png)
+
+To reiterate, combining starvation and priority inversion can lead to a situation where even
+the high-priority tasks are unable to execute their instructions.
+
+
+## Causes of starvation
+
+With the complexity of designing a scheduling algorithm in mind, let us discuss the specific causes of starvation. The situations that we described in the preceding section indicate some potential causes of the situation of starvation. However, starvation can arise from a number of sources, as follows:
+- Processes (or threads) with high priorities dominate the execution flow in the CPU,
+    - nd hence, low-priority processes (or threads) are not given the opportunity to execute their own instructions.
+- Processes (or threads) with high priorities dominate the usage of non-shareable resources
+    - and hence, low-priority processes (or threads) are not given the opportunity to execute their own instructions.
+    - This situation is similar to the first one, but addresses the priority of accessing resources, instead of the priority of the execution itself.
+- Processes (or threads) with low priorities are waiting for resources to execute their instructions
+    - but, as soon as the resources become available, other processes (or threads) with higher priorities are immediately given access to them, so the low-priority processes (or threads) wait infinitely.
+
+There are other causes of starvation, as well, but the preceding are the most common root causes. 
+
+## Starvation's relationship to deadlock
+
+Interestingly, deadlock situations can also lead to starvation, as the definition of starvation states that if there is a process (or a thread) that is unable to make any progress because it cannot gain access to the necessary process, then the process (or thread) is experiencing starvation. 
+
+Recall our example of deadlock, the Dining Philosophers problem, illustrated as follows:
+
+![An illustration of the Dining Philosophers problem](image-45.png)
+
+When deadlock occurs for this situation, no philosopher can obtain the necessary resources
+to execute their instructions (each philosopher is required to have two forks to start eating).
+Each philosopher that is in a deadlock is therefore also in a state of starvation.
+
+## The readers-writers problem
+
+The readers-writers problem is one of the classic and most complex examples in the field of computer science, illustrating problems that might occur in a concurrent program.
+- Throughout the analysis of the different variations of the readers-writers problem, we will reveal more about starvation, as well as its common causes.
+- We will also simulate the problem in Python, so that a deeper understanding of the problem can be gained.
+
+## Problem statement
